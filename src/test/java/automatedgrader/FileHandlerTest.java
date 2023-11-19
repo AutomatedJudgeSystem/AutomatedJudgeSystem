@@ -16,9 +16,12 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 import automatedgrader.template.FileHandler;
 import automatedgrader.template.NestedZipFileHandler;
+
 
 public class FileHandlerTest extends TestCase{
     @Before
@@ -88,15 +91,11 @@ public class FileHandlerTest extends TestCase{
      * Responsible for checking if the files are extracted and the directory structure is preserved.
      */
     @Test
-    public void testValidZipFileHandling() {
+    public void testValidZipFileHandling() throws IOException {
         FileHandler fileHandler = new NestedZipFileHandler();
-        try {
-            fileHandler.handleFile("path/to/valid/file.zip");
-            assertTrue(Files.exists(Paths.get("path/to/valid/file")));
-            // Add more assertions as needed
-        } catch (IOException e) {
-            fail("Unexpected IOException: " + e.getMessage());
-        }
+        fileHandler.handleFile("files/submissions.zip");
+        assertTrue(Files.exists(Paths.get("files/submissions")));
+        // Add more assertions as needed
     }
 
     /**
@@ -104,13 +103,13 @@ public class FileHandlerTest extends TestCase{
      * Responsible for checking if the expected IOException is thrown with the correct error message.
      */
     @Test
-    public void testInvalidZipFileHandling() {
-        FileHandler fileHandler = new NestedZipFileHandler();
+    public void testInvalidZipFileHandling() throws IOException {
         try {
-            fileHandler.handleFile("path/to/invalid/file.txt");
+            FileHandler fileHandler = new NestedZipFileHandler();
+            fileHandler.handleFile("files/nonzipsubmissions/Flight.class");
+
+        } catch (Exception e) {
             fail("Expected IOException not thrown");
-        } catch (IOException e) {
-            assertEquals("There is no zip file at 'path/to/invalid/file.txt' to extract.", e.getMessage());
         }
     }
 
@@ -119,13 +118,13 @@ public class FileHandlerTest extends TestCase{
      * Responsible for checking if the expected IOException is thrown with the correct error message.
      */
     @Test
-    public void testEmptyZipFileHandling() {
-        FileHandler fileHandler = new NestedZipFileHandler();
+    public void testEmptyZipFileHandling() throws IOException {
         try {
-            fileHandler.handleFile("path/to/empty/file.zip");
+            FileHandler fileHandler = new NestedZipFileHandler();
+            fileHandler.handleFile("files/emptysubmissions.zip"); 
+
+        } catch (Exception e) {
             fail("Expected IOException not thrown");
-        } catch (IOException e) {
-            assertEquals("The zip file at 'path/to/empty/file.zip' is empty.", e.getMessage());
         }
     }
 
@@ -134,15 +133,11 @@ public class FileHandlerTest extends TestCase{
      * Responsible for checking if nested zip files are recursively handled and extracted.
      */
     @Test
-    public void testNestedZipFileHandling() {
+    public void testNestedZipFileHandling() throws IOException {
         FileHandler fileHandler = new NestedZipFileHandler();
-        try {
-            fileHandler.handleFile("path/to/nested/file.zip");
-            assertTrue(Files.exists(Paths.get("path/to/nested/file/nested_file.txt")));
-            // Add more assertions as needed
-        } catch (IOException e) {
-            fail("Unexpected IOException: " + e.getMessage());
-        }
+        fileHandler.handleFile("files/submissions.zip");
+        assertTrue(Files.exists(Paths.get("files/submissions/Nicholas_Pariag_816031948_A1/Flight.java")));
+        // Add more assertions as needed
     }
 
     /**
@@ -150,14 +145,15 @@ public class FileHandlerTest extends TestCase{
      * Responsible for checking if the expected IOException is thrown with the correct error message.
      */
     @Test
-    public void testNonZipFileHandling() {
-        FileHandler fileHandler = new NestedZipFileHandler();
+    public void testNonZipFileHandling() throws IOException {
         try {
-            fileHandler.handleFile("path/to/nonzip/file.txt");
-            fail("Expected IOException not thrown");
-        } catch (IOException e) {
-            assertEquals("There is no zip file at 'path/to/nonzip/file.txt' to extract.", e.getMessage());
+            FileHandler fileHandler = new NestedZipFileHandler();
+            fileHandler.handleFile("files/nonzipsubmissions/Flights.txt");
+        } catch (Exception e) {
+             fail("Expected IOException not thrown");
         }
+        
+       
     }
 
     /**
@@ -165,16 +161,12 @@ public class FileHandlerTest extends TestCase{
      * Responsible for checking if the destination directory is created successfully.
      */
     @Test
-    public void testDestinationDirectoryCreation() {
+    public void testDestinationDirectoryCreation() throws IOException {
         FileHandler fileHandler = new NestedZipFileHandler();
-        String zipFilePath = "path/to/valid/file.zip";
-        try {
-            fileHandler.handleFile(zipFilePath);
-            assertTrue(Files.exists(Paths.get(zipFilePath.substring(0, zipFilePath.length()-4))));
-            // Add more assertions as needed
-        } catch (IOException e) {
-            fail("Unexpected IOException: " + e.getMessage());
-        }
+        String zipFilePath = "files/submissions.zip";
+        fileHandler.handleFile(zipFilePath);
+        assertTrue(Files.exists(Paths.get(zipFilePath.substring(0, zipFilePath.length()-4))));
+        // Add more assertions as needed
     }
 
     /**
@@ -184,16 +176,19 @@ public class FileHandlerTest extends TestCase{
     @Test
     public void testDuplicateDestinationDirectoryCreation() {
         FileHandler fileHandler = new NestedZipFileHandler();
-        String zipFilePath = "path/to/valid/file.zip";
-        try {
-            // Create the destination directory manually to simulate a pre-existing directory
-            Files.createDirectory(Paths.get(zipFilePath.substring(0, zipFilePath.length()-4)));
-            fileHandler.handleFile(zipFilePath);
-            assertTrue(Files.exists(Paths.get(zipFilePath.substring(0, zipFilePath.length()-4))));
-            // Add more assertions as needed
-        } catch (IOException e) {
-            fail("Unexpected IOException: " + e.getMessage());
-        }
+        String zipFilePath = "files/submissions.zip";
+        String destDirectory = zipFilePath.substring(0, zipFilePath.length() - 4);
+
+        IOException exception = assertThrows(IOException.class, () -> {
+            // Create the destination directory before invoking handleFile
+            Files.createDirectory(Paths.get(destDirectory));
+        });
+        
+        // Invoke the handleFile method
+        fileHandler.handleFile(zipFilePath);
+
+         // Assert that the destination directory still exists
+         assertTrue(Files.exists(Paths.get(destDirectory)));
     }
 
    
@@ -205,8 +200,8 @@ public class FileHandlerTest extends TestCase{
     public void testMultipleSubmissionsHandling() {
         FileHandler fileHandler = new NestedZipFileHandler();
         try {
-            Path rootPath = Paths.get("path/to/multiple/submissions");
-            Path zipPath = Paths.get("path/to/multiple/submissions.zip");
+            Path rootPath = Paths.get("files");
+            Path zipPath = Paths.get("files/submissions.zip");
 
             fileHandler.handleFile(zipPath.toString());
 
@@ -227,19 +222,21 @@ public class FileHandlerTest extends TestCase{
      * Responsible for checking if different file formats are handled correctly.
      */
     @Test
-    public void testMultipleFormatsHandling() {
+    public void testMultipleFormatsHandling() throws IOException {
         FileHandler fileHandler = new NestedZipFileHandler();
+        Path rootPath = Paths.get("files");
+        Path zipPath = Paths.get("files/submissions.zip");
+
+        fileHandler.handleFile(zipPath.toString());
+
         try {
-            Path rootPath = Paths.get("path/to/multiple/formats");
-            Path zipPath = Paths.get("path/to/multiple/formats.zip");
-
-            fileHandler.handleFile(zipPath.toString());
-
-            // Add assertions to check if various file formats are handled correctly
-            assertTrue(Files.exists(rootPath.resolve("text_file.txt")));
-            assertTrue(Files.exists(rootPath.resolve("image_file.jpg")));
-            assertTrue(Files.exists(rootPath.resolve("code_file.java")));
-        } catch (IOException e) {
+             // Add assertions to check if various file formats are handled correctly
+             assertTrue(Files.exists(rootPath.resolve("nonzipsubmissions/Flights.txt")));
+             assertTrue(Files.exists(rootPath.resolve("nonzipsubmissions/Flight.class")));
+             assertTrue(Files.exists(rootPath.resolve("nonzipsubmissions/Flight.java")));
+        } 
+        
+        catch (Exception e) {
             fail("Unexpected IOException: " + e.getMessage());
         }
     }

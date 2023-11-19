@@ -1,24 +1,5 @@
 package automatedgrader;
 
-/*
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-*/
-
-// import com.github.javaparser.JavaParser;
-// import com.github.javaparser.ast.AccessSpecifier;
-// import com.github.javaparser.ast.CompilationUnit;
-// import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-// import com.github.javaparser.ast.body.FieldDeclaration;
-// import com.github.javaparser.ast.body.MethodDeclaration;
-// import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-
 import automatedgrader.template.NestedZipFileHandler;
 
 public class App {
