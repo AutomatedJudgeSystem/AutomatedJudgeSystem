@@ -1,3 +1,5 @@
+package automatedgrader.strategy;
+
 public class AssignmentEvaluator {
     private CalculationStrategy calculationStrategy;
 
