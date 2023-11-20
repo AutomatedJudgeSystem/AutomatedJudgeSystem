@@ -1,4 +1,4 @@
-package project.strategy;
+package automatedgrader.strategy;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,7 +13,6 @@ public class BehaviourEvaluation implements EvaluationStrategy {
         String javaCode = readJavaCodeFromFile(filePath);
 
         checkMethodBehavior(javaCode);
-        // Add more behavior checks
     }
 
     private void checkMethodBehavior(String javaCode) {
