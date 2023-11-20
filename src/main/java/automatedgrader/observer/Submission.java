@@ -66,4 +66,8 @@ public class Submission implements SubmissionSubject {
     public void setOverallScore(double overallScore) {
         this.overallScore = overallScore;
     }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
 }
