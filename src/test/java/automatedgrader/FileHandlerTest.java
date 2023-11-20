@@ -11,6 +11,9 @@ import org.junit.Test;
 import automatedgrader.template.FileHandler;
 import automatedgrader.template.NestedZipFileHandler;
 
+/**
+ * Test class for FileHandler and its concrete implementation NestedZipFileHandler.
+ */
 public class FileHandlerTest extends TestCase{
     final static String path = "files/test/";
 
