@@ -6,7 +6,6 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import automatedgrader.strategy.EvaluationResult;
-
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -19,6 +18,7 @@ import java.util.List;
 public class PDFGenerator implements PDFObserver {
 
     private static final String OUTPUT_DIRECTORY = "submissions";
+
     
     public void updatePDF(Submission submission, List<EvaluationResult> testResults) {
         try (PDDocument document = new PDDocument()) {
@@ -36,9 +36,10 @@ public class PDFGenerator implements PDFObserver {
                 addTestResults(contentStream, testResults);
                 addOverallScore(contentStream, submission.getOverallScore());
                 addGeneratedDate(contentStream);
-
+        
                 // Save PDF in folder
                 savePDF(document, pdfFileName);
+        document.close();               
             }
         } catch (IOException e) {
             handleIOException(e);
@@ -61,7 +62,7 @@ public class PDFGenerator implements PDFObserver {
             contentStream.newLineAtOffset(0, -15);
         }
     }
-    
+
     private void addOverallScore(PDPageContentStream contentStream, double overallScore) throws IOException {
         contentStream.showText("Overall Score: " + overallScore);
         contentStream.newLineAtOffset(0, -20);
@@ -70,6 +71,7 @@ public class PDFGenerator implements PDFObserver {
     private void addGeneratedDate(PDPageContentStream contentStream) throws IOException {
         contentStream.showText("Generated on: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         contentStream.endText();
+        contentStream.close();
     }
 
     private void savePDF(PDDocument document, String pdfFileName) throws IOException {
@@ -77,7 +79,6 @@ public class PDFGenerator implements PDFObserver {
         if (!Files.exists(outputDirectoryPath)) {
             Files.createDirectories(outputDirectoryPath);
         }
-
         Path outputPath = outputDirectoryPath.resolve(pdfFileName);
         document.save(outputPath.toString());
     }
