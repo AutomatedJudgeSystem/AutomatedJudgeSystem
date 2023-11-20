@@ -105,4 +105,22 @@ public class FileHandlerTest extends TestCase{
             assertEquals("The folder '" + path + "valid' exists already. It's contents may be altered but not deleted.", e.getMessage());
         }
     }
+
+    /**
+     * Test case to ensure that multiple valid zip files are handled correctly.
+     * Responsible for checking if the files are extracted and the directory structure is preserved.
+     */
+    @Test
+    public void testMultipleValidZipFilesHandling() {
+        // Add test logic for multiple submissions...
+    }
+
+    /**
+     * Test case to verify correct handling of multi-file submissions.
+     * Responsible for checking if the files within the submission are processed correctly.
+     */
+    @Test
+    public void testMultiFileSubmissionHandling() {
+        // Add test logic for multi-file submissions...
+    }
 }
