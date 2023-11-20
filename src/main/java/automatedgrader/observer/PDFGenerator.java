@@ -27,9 +27,9 @@ public class PDFGenerator implements PDFObserver {
 
     // Variable to store the result of the calculate method
     private int passengerScore;
-    private int luggageSlipStrategy;
-    private int luggageManifestStrategy;
-    private int flightStrategy;
+    private int luggageSlipScore;
+    private int luggageManifestScore;
+    private int flightScore;
     EvaluationResult result = new EvaluationResult();
 
     public void updatePDF(Submission submission, List<EvaluationResult> testResults) {
@@ -92,28 +92,28 @@ public class PDFGenerator implements PDFObserver {
 
     private void addPassengerEvaluation(PDPageContentStream contentStream, List<EvaluationResult> testResults) throws IOException{
         contentStream.newLineAtOffset(0, -30);
-        contentStream.showText("Passsenger Class Evaluation: " + calculatePassengerScore(OUTPUT_DIRECTORY));
+        contentStream.showText("Passsenger Class Evaluation: " + passengerScore);
         contentStream.newLineAtOffset(0, -15);
         contentStream.showText("Passsenger Class Feedback: " + result.getFeedback());
     }
 
     private void addLuggageSlipEvaluation(PDPageContentStream contentStream, List<EvaluationResult> testResults) throws IOException{
         contentStream.newLineAtOffset(0, -30);
-        contentStream.showText("LuggageSlip Class Evaluation: " + luggageSlipStrategy);
+        contentStream.showText("LuggageSlip Class Evaluation: " + luggageSlipScore);
         contentStream.newLineAtOffset(0, -15);
         contentStream.showText("LuggageSlip Class Feedback: " + result.getFeedback());
     }
 
     private void addLuggageManifestEvaluation(PDPageContentStream contentStream, List<EvaluationResult> testResults) throws IOException{
         contentStream.newLineAtOffset(0, -30);
-        contentStream.showText("LuggageManifest Class Evaluation: " + luggageManifestStrategy);
+        contentStream.showText("LuggageManifest Class Evaluation: " + luggageManifestScore);
         contentStream.newLineAtOffset(0, -15);
         contentStream.showText("LuggageManifest Class Feedback: " + result.getFeedback());
     }
 
     private void addFlightEvaluation(PDPageContentStream contentStream, List<EvaluationResult> testResults) throws IOException{
         contentStream.newLineAtOffset(0, -30);
-        contentStream.showText("Flight Class Evaluation: " + flightStrategy);
+        contentStream.showText("Flight Class Evaluation: " + flightScore);
         contentStream.newLineAtOffset(0, -15);
         contentStream.showText("Flight Class Feedback: " + result.getFeedback());
         contentStream.newLineAtOffset(0, -30);
@@ -130,31 +130,36 @@ public class PDFGenerator implements PDFObserver {
 
     //method to calculate Passenger score using PassengerCalculationStrategy
     private int calculatePassengerScore(String filePath) {
-        //instance of PassengerCalculationStrategy
+        // instance of PassengerCalculationStrategy
         PassengerCalculationStrategy passengerStrategy = new PassengerCalculationStrategy();
         // Use the calculate method
-        return passengerStrategy.calculate(filePath);
+        passengerScore = passengerStrategy.calculate(filePath);
+        return passengerScore;
     }
 
     private int calculateLuggageSlipScore(String filePath) {
         //instance of PassengerCalculationStrategy
         LuaggageSlipCalculationStrategy luggageSlipStrategy = new LuaggageSlipCalculationStrategy();
         // Use the calculate method
-        return luggageSlipStrategy.calculate(filePath);
+        luggageSlipScore = luggageSlipStrategy.calculate(filePath);
+        return luggageSlipScore;
     }
 
     private int calculateLuggageManifestScore(String filePath) {
         //instance of PassengerCalculationStrategy
         LuggageManifestCalculationsStrategy luggageManifestStrategy = new LuggageManifestCalculationsStrategy();
         // Use the calculate method
-        return luggageManifestStrategy.calculate(filePath);
+        luggageManifestScore = luggageManifestStrategy.calculate(filePath);
+
+        return luggageManifestScore;
     }
 
     private int calculateFlightScore(String filePath) {
         //instance of PassengerCalculationStrategy
         FlightCalculationStrategy flightStrategy = new FlightCalculationStrategy();
         // Use the calculate method
-        return flightStrategy.calculate(filePath);
+        flightScore = flightStrategy.calculate(filePath);
+        return flightScore;
     }
 
     private void handleIOException(IOException e) {
