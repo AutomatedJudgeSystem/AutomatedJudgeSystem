@@ -7,7 +7,17 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+/**
+ * Handles the extraction of files from a nested zip archive.
+ */
 public class NestedZipFileHandler extends FileHandler{
+     /**
+     * Extracts files from a nested zip archive specified by the given path.
+     *
+     * @param zipFilePath The path to the nested zip file to be extracted.
+     * @throws IOException If an I/O error occurs during extraction.
+     */
+    @Override
     protected void extract(String zipFilePath) throws IOException{        
         ZipInputStream in = new ZipInputStream(new FileInputStream(zipFilePath));
         ZipEntry entry = in.getNextEntry();
