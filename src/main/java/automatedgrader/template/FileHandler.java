@@ -8,10 +8,25 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.zip.ZipInputStream;
 
+/**
+ * The abstract base class for handling files in the Template Design Pattern.
+ * Subclasses must implement the 'extract' method to define how files are extracted.
+ */
 public abstract class FileHandler {
+    /**
+     * Extracts files from a zip archive specified by the given path.
+     *
+     * @param zipFilePath The path to the zip file to be extracted.
+     * @throws IOException If an I/O error occurs during extraction.
+     */
     protected abstract void extract(String zipFilePath) throws IOException;
 
-    //method to handle file extraction
+    /**
+     * Handles the extraction of files from the specified zip file path.
+     *
+     * @param zipFilePath The path to the zip file to be extracted.
+     * @throws IOException If an I/O error occurs during the extraction process.
+     */
     public void handleFile(String zipFilePath) throws IOException{
         try {
             if(checkForErrors(zipFilePath) == false){
@@ -24,7 +39,12 @@ public abstract class FileHandler {
         }
     }
 
-    //returns the file extension of a given file
+    /**
+     * Returns the file extension of a given filename.
+     *
+     * @param filename The name of the file.
+     * @return The file extension.
+     */
     protected static String getExtension(String filename){
         int index = filename.lastIndexOf('.');
         String extension = "";
@@ -35,7 +55,12 @@ public abstract class FileHandler {
         return extension;
     }
 
-    //creates directory where extracted files would be stored
+    /**
+     * Creates the destination directory where extracted files will be stored.
+     *
+     * @param zipFilePath The path to the zip file.
+     * @throws IOException If an I/O error occurs while creating the directory.
+     */
     protected void createDestinationDirectory(String zipFilePath) throws IOException{
         Path destDirectory = Paths.get(zipFilePath.substring(0, zipFilePath.length()-4));
 
@@ -50,7 +75,14 @@ public abstract class FileHandler {
         }
     }
 
-    //checks for the presence of various issues with the file to be extracted. return false if no errors are detected.
+    /**
+     * Checks for various issues with the file to be extracted.
+     * Returns false if no errors are detected.
+     *
+     * @param zipFilePath The path to the zip file.
+     * @return True if there are errors, false otherwise.
+     * @throws IOException If an I/O error occurs during the error check.
+     */
     protected boolean checkForErrors(String zipFilePath) throws IOException{
         if(!Files.exists(Paths.get(zipFilePath))){
             throw new IOException("The file at '" + zipFilePath + "' does not exist.");
