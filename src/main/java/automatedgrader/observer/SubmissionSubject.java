@@ -23,6 +23,6 @@ public interface SubmissionSubject {
   /**
    * Notifies all attached PDFObservers of a change in the subject.
    */
-  void notifyObserver();
+  void notifyObserver(List<EvaluationResult> testResults);
 }
 
