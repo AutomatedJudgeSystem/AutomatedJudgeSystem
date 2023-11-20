@@ -11,7 +11,7 @@ import java.util.zip.ZipInputStream;
  * Handles the extraction of files from a nested zip archive.
  */
 public class NestedZipFileHandler extends FileHandler{
-     /**
+    /**
      * Extracts files from a nested zip archive specified by the given path.
      *
      * @param zipFilePath The path to the nested zip file to be extracted.
