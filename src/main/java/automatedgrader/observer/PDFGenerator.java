@@ -15,7 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path; 
 import java.util.List;
 
-// Concrete Strategy Class
+// Concrete Observer Class
 public class PDFGenerator implements PDFObserver {
     
     public void updatePDF(Submission submission, List<EvaluationResult> testResults) {

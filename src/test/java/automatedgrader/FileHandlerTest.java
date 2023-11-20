@@ -19,9 +19,12 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 import automatedgrader.template.FileHandler;
 import automatedgrader.template.NestedZipFileHandler;
+
 
 public class FileHandlerTest extends TestCase{
     final static String path = "src/test/java/automatedgrader/";
@@ -80,7 +83,7 @@ public class FileHandlerTest extends TestCase{
      * Responsible for checking if the files are extracted and the directory structure is preserved.
      */
     @Test
-    public void testValidZipFile() {
+    public void testValidZipFileHandling() {
         FileHandler fileHandler = new NestedZipFileHandler();
         try {
             fileHandler.handleFile(path + "valid.zip");
@@ -136,17 +139,13 @@ public class FileHandlerTest extends TestCase{
      * Test case to verify the handling of a nested zip file.
      * Responsible for checking if nested zip files are recursively handled and extracted.
      */
-    // @Test
-    // public void testNestedZipFileHandling() {
-    //     FileHandler fileHandler = new NestedZipFileHandler();
-    //     try {
-    //         fileHandler.handleFile("path/to/nested/file.zip");
-    //         assertTrue(Files.exists(Paths.get("path/to/nested/file/nested_file.txt")));
-    //         // Add more assertions as needed
-    //     } catch (IOException e) {
-    //         fail("Unexpected IOException: " + e.getMessage());
-    //     }
-    // }
+    @Test
+    public void testNestedZipFileHandling() throws IOException {
+        FileHandler fileHandler = new NestedZipFileHandler();
+        fileHandler.handleFile("files/submissions.zip");
+        assertTrue(Files.exists(Paths.get("files/submissions/Nicholas_Pariag_816031948_A1/Flight.java")));
+        // Add more assertions as needed
+    }
 
     /**
      * Test case to verify the handling of a non-existent file.
@@ -161,6 +160,8 @@ public class FileHandlerTest extends TestCase{
         } catch (IOException e) {
             assertEquals("The file at '" + path + "nonExistent.zip' does not exist.", e.getMessage());
         }
+        
+       
     }
 
 //     /**

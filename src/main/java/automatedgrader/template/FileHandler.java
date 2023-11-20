@@ -8,8 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.zip.ZipInputStream;
 
-import com.github.javaparser.Problem;
-
 public abstract class FileHandler {
     protected abstract void extract(String zipFilePath) throws IOException;
 
