@@ -6,7 +6,15 @@ import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This class implements the EvaluationStrategy interface for evaluating return types in Java code.
+ */
 public class ReturnTypeEvaluation implements EvaluationStrategy {
+    /**
+     * Evaluates the return types of methods in the specified Java file.
+     *
+     * @param filePath The path of the Java file to evaluate.
+     */
     @Override
     public void evaluate(String filePath) {
         String javaCode = readJavaCodeFromFile(filePath);
@@ -14,6 +22,11 @@ public class ReturnTypeEvaluation implements EvaluationStrategy {
         checkReturnTypes(javaCode);
     }
 
+    /**
+     * Checks the return types of methods in the provided Java code and prints feedback.
+     *
+     * @param javaCode The Java code to analyze.
+     */
     private void checkReturnTypes(String javaCode) {
         Pattern returnTypePattern = Pattern.compile("\\b(\\w+)\\s+(\\w+)\\s*\\([^\\)]*\\)\\s*\\{");
         Matcher matcher = returnTypePattern.matcher(javaCode);
@@ -50,6 +63,12 @@ public class ReturnTypeEvaluation implements EvaluationStrategy {
         }
     }
 
+    /**
+     * Reads the content of a Java file.
+     *
+     * @param filePath The path of the Java file to read.
+     * @return The content of the Java file as a string.
+     */
     private String readJavaCodeFromFile(String filePath) {
         try {
             return Files.readString(Paths.get(filePath));
