@@ -1,4 +1,4 @@
-package automatedgrader.strategy;
+package project.strategy;
 
 import java.io.IOException;
 import java.nio.file.Files;
