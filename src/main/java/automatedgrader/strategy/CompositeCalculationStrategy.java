@@ -1,4 +1,4 @@
-package project.strategy;
+package automatedgrader.strategy;
 
 public class CompositeCalculationStrategy implements CalculationStrategy {
     private CalculationStrategy[] strategies;
