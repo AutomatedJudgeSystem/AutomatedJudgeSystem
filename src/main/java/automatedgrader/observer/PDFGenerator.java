@@ -5,7 +5,6 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
-import automatedgrader.observer.Submission;
 import automatedgrader.strategy.EvaluationResult;
 
 import java.io.IOException;
