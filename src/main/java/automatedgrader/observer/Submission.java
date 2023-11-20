@@ -6,30 +6,28 @@ public class Submission implements SubmissionSubject {
     private String fileName;
     private int assignmentNumber;
     private double overallScore;
+    private List<PDFObserver> observers;
 
     public Submission(String studentId, String fileName, int assignmentNumber) {
         this.studentId = studentId;
         this.fileName = fileName;
         this.assignmentNumber = assignmentNumber;
+        this.observer = ArrayList<List>;
         // You can initialize other properties as needed
     }
     
-    @Override
     public void attachObserver(PDFObserver observer) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'attachObserver'");
+        observers.add(observer);
     }
 
-    @Override
     public void detachObserver(PDFObserver observer) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'detachObserver'");
+        observers.remove(observer);
     }
 
-    @Override
-    public void notifyObserver() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'notifyObserver'");
+    private void notifyObservers(List<EvaluationResult> testResults) {
+        for (PDFObserver observer : observers) {
+            observer.updatePDF(this, testResults);
+        }
     }
 
     public String getStudentId() {
