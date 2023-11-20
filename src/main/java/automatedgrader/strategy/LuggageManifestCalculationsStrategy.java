@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LuggageManifestCalculationStrategy implements CalculationStrategy{
+public class LuggageManifestCalculationsStrategy implements CalculationStrategy{
     @Override
     public int calculate(String filePath){
         String javaCode = readJavaCodeFromFile(filePath);
@@ -22,7 +22,7 @@ public class LuggageManifestCalculationStrategy implements CalculationStrategy{
         return score;
     }
 
-    private String readJavaCodeFromFile(String filePath) {
+    public String readJavaCodeFromFile(String filePath) {
         try {
             return Files.readString(Paths.get(filePath));
         } catch (IOException e) {
@@ -31,7 +31,7 @@ public class LuggageManifestCalculationStrategy implements CalculationStrategy{
         }
     }
 
-    private int checkAttributes(String javaCode) {
+    public int checkAttributes(String javaCode) {
         int attributeScore = 0;
 
         String[] expectedAttributeTypes = {"ArrayList<LuggageSlip>"};
@@ -53,7 +53,7 @@ public class LuggageManifestCalculationStrategy implements CalculationStrategy{
         return attributeScore;
     }
 
-    private int checkConstructor(String javaCode) {
+    public int checkConstructor(String javaCode) {
         int constructorScore = 0;
 
         Pattern constructorPattern = Pattern.compile("public\\s+LuggageManifest\\(\\)\\s*\\{([^}]*)\\}");

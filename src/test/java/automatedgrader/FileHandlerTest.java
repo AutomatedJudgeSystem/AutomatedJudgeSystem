@@ -2,14 +2,30 @@ package automatedgrader;
 
 import junit.framework.TestCase;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
+
+
 
 import automatedgrader.template.FileHandler;
 import automatedgrader.template.NestedZipFileHandler;
+
 
 /**
  * Test class for FileHandler and its concrete implementation NestedZipFileHandler.

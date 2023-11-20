@@ -26,7 +26,7 @@ public class PDFGeneratorTest {
         submission.setFileName("TestFile");
         submission.setStudentId("123456");
         submission.setAssignmentNumber(1);
-        submission.setFilePath("/path/to/test/file.java");
+        submission.setFileName("/path/to/test/file.java");
 
         // Create mock EvaluationResults
         List<EvaluationResult> testResults = new ArrayList<>();

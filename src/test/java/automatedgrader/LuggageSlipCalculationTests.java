@@ -1,8 +1,8 @@
-package project;
+package automatedgrader;
 
 import org.junit.jupiter.api.Test;
 
-import project.strategy.LuaggageSlipCalculationStrategy;
+import automatedgrader.strategy.LuaggageSlipCalculationStrategy;
 
 import java.io.IOException;
 import java.nio.file.Files;

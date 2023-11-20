@@ -24,7 +24,7 @@ public class PassengerCalculationStrategy implements CalculationStrategy {
         return score;
     }
 
-    private String readJavaCodeFromFile(String filePath) {
+    public String readJavaCodeFromFile(String filePath) {
         try {
             return Files.readString(Paths.get(filePath));
         } catch (IOException e) {
@@ -33,7 +33,7 @@ public class PassengerCalculationStrategy implements CalculationStrategy {
         }
     }
 
-    private int checkAttributeTypes(String javaCode) {
+    public int checkAttributeTypes(String javaCode) {
         int attributeScore = 0;
 
         String[] attributes = {"passportNumber", "flightNo", "firstName", "lastName", "numLuggage", "cabinClass"};
@@ -52,7 +52,7 @@ public class PassengerCalculationStrategy implements CalculationStrategy {
         return attributeScore;
     }
 
-    private int checkConstructor(String javaCode) {
+    public int checkConstructor(String javaCode) {
         Pattern constructorPattern = Pattern.compile("public\\s+Passenger\\s*\\(\\s*String\\s+passportNumber,\\s*String\\s+firstName,\\s*String\\s+lastName,\\s*String\\s+flightNo\\s*\\)\\s*\\{([^}]*)\\}");
         Matcher matcher = constructorPattern.matcher(javaCode);
     

@@ -36,7 +36,7 @@ public class EvaluationContext {
                 new ReturnTypeEvaluation(),
                 new BehaviourEvaluation(),
                 new InheritanceEvaluation(),
-                new LuggageManifestCalculationStrategy(),
+                new LuggageManifestCalculationsStrategy(),
                 new PassengerCalculationStrategy()
         ));
         return assignmentEvaluator.evaluateAssignment(filePath);

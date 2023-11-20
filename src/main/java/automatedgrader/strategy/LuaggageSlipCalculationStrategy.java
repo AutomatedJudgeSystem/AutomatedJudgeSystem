@@ -21,7 +21,7 @@ public class LuaggageSlipCalculationStrategy implements CalculationStrategy{
         return score;
     }
 
-    private String readJavaCodeFromFile(String filePath) {
+    public String readJavaCodeFromFile(String filePath) {
         try {
             return Files.readString(Paths.get(filePath));
         } catch (IOException e) {
@@ -30,7 +30,7 @@ public class LuaggageSlipCalculationStrategy implements CalculationStrategy{
         }
     }
 
-    private int checkAttributeTypes(String javaCode) {
+    public int checkAttributeTypes(String javaCode) {
         int attributeScore = 0;
 
         String[] expectedAttributeTypes = {"Passenger", "int", "String", "String"};
@@ -54,7 +54,7 @@ public class LuaggageSlipCalculationStrategy implements CalculationStrategy{
         return attributeScore;
     }
 
-    private int checkConstructors(String javaCode) {
+    public int checkConstructors(String javaCode) {
         int constructorScore = 0;
 
         // Check LuggageSlip(Passenger p, Flight f) constructor

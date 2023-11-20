@@ -1,4 +1,4 @@
-package project;
+package automatedgrader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -11,7 +11,7 @@ import java.nio.file.StandardOpenOption;
 
 import org.junit.Test;
 
-import project.strategy.FlightCalculationStrategy;
+import automatedgrader.strategy.FlightCalculationStrategy;
 
 public class FlightCalculationTests {
 
