@@ -8,20 +8,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.zip.ZipInputStream;
 
+import com.github.javaparser.Problem;
+
 public abstract class FileHandler {
     protected abstract void extract(String zipFilePath) throws IOException;
 
     //method to handle file extraction
-    public void handleFile(String zipFilePath){
-        try{
+    public void handleFile(String zipFilePath) throws IOException{
+        try {
             if(checkForErrors(zipFilePath) == false){
-                createDestinationDirectory(zipFilePath);
-                extract(zipFilePath);
+                    createDestinationDirectory(zipFilePath);
+                    extract(zipFilePath);
             }
         }
-        catch(IOException e){
-            System.err.println("An error occured when trying to extract the zip file at '" + zipFilePath + "'.");
-            e.printStackTrace();
+        catch (IOException e) {
+            throw e;
         }
     }
 
@@ -47,24 +48,26 @@ public abstract class FileHandler {
             }
         }
         else{
-            System.err.println("The destination folder exists already. Files may be added or updated but none deleted.");
+            throw new IOException("The folder '" + zipFilePath.substring(0, zipFilePath.length()-4) + "' exists already. It's contents may be altered but not deleted.");
         }
     }
 
     //checks for the presence of various issues with the file to be extracted. return false if no errors are detected.
     protected boolean checkForErrors(String zipFilePath) throws IOException{
-        boolean hasError = false;
+        if(!Files.exists(Paths.get(zipFilePath))){
+            throw new IOException("The file at '" + zipFilePath + "' does not exist.");
+        }
         if(!getExtension(zipFilePath).equals("zip")){
-            System.err.println("There is no zip file at '" + zipFilePath + "' to extract.");
-            System.out.println(getExtension(zipFilePath));
-            hasError = true;
+            throw new IOException("There is no zip file at '" + zipFilePath + "' to extract.");
         }
         ZipInputStream in = new ZipInputStream(new FileInputStream(zipFilePath));
         if(in.getNextEntry() == null){
-            System.err.println("The zip file at '" + zipFilePath + "' is empty.");
-            hasError = true;
+            in.close();
+            throw new IOException("The zip file at '" + zipFilePath + "' is empty.");
         }
-        in.close();
-        return hasError;
+        else{
+            in.close();
+            return false;
+        }
     }
 }

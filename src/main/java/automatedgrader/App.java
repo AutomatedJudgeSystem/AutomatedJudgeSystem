@@ -1,5 +1,7 @@
 package automatedgrader;
 
+import java.io.IOException;
+
 /*
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,7 +27,14 @@ public class App {
     public static void main(String[] args) {
         //extracts all files from 'files/submissions.zip' and saves them to 'files/submissions'
         NestedZipFileHandler fileExtractor = new NestedZipFileHandler();
-        fileExtractor.handleFile("files/submissions.zip");
+        String zipFilePath = "files/submissions.zip";
+        try {
+            fileExtractor.handleFile(zipFilePath);
+        } 
+        catch (IOException e) {
+            System.err.println("Unexpected IOException: " + e.getMessage());
+            e.printStackTrace();
+        }
         
     }
         

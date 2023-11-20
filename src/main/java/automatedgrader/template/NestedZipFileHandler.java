@@ -16,6 +16,7 @@ public class NestedZipFileHandler extends FileHandler{
             File file = new File(destFilePath);
             if(!file.exists()){
                 Path destinationPath = Paths.get(destFilePath);
+                Files.createDirectories(destinationPath.getParent());
                 Files.copy(in, destinationPath, StandardCopyOption.REPLACE_EXISTING);
                 if(getExtension(entry.getName()).equals("zip")){
                     handleFile(destFilePath);
