@@ -3,6 +3,10 @@ package automatedgrader.strategy;
 // Class representing the result of an evaluation
 public class EvaluationResult {
 
+     public EvaluationResult( String testname, String total, String feedback ){
+
+    }
+    
     public String getTestName() {
         return null;
     }
