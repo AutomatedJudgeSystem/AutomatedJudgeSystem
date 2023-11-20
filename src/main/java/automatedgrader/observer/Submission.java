@@ -12,6 +12,7 @@ public class Submission implements SubmissionSubject {
     private int assignmentNumber;
     private double overallScore;
     private List<PDFObserver> observers;
+    private String filePath;
 
     public Submission(String studentId, String fileName, int assignmentNumber) {
         this.studentId = studentId;
