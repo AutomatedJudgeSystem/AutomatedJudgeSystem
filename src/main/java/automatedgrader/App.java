@@ -1,5 +1,7 @@
 package automatedgrader;
 
+import java.io.IOException;
+
 import automatedgrader.template.NestedZipFileHandler;
 
 public class App {
