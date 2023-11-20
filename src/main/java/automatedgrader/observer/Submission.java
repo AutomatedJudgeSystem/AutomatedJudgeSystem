@@ -1,5 +1,10 @@
 package automatedgrader.observer;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import automatedgrader.strategy.EvaluationResult;
+
 // Concrete Subject Class and Context Class for State Design Pattern
 public class Submission implements SubmissionSubject {
     private String studentId;
@@ -12,7 +17,7 @@ public class Submission implements SubmissionSubject {
         this.studentId = studentId;
         this.fileName = fileName;
         this.assignmentNumber = assignmentNumber;
-        this.observer = ArrayList<List>;
+        this.observers = new ArrayList<>();
         // You can initialize other properties as needed
     }
     
@@ -24,7 +29,7 @@ public class Submission implements SubmissionSubject {
         observers.remove(observer);
     }
 
-    private void notifyObservers(List<EvaluationResult> testResults) {
+    public void notifyObserver(List<EvaluationResult> testResults) {
         for (PDFObserver observer : observers) {
             observer.updatePDF(this, testResults);
         }
