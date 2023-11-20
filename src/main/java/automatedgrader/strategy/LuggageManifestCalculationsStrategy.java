@@ -1,4 +1,4 @@
-package automatedgrader.strategy;
+package project.strategy;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LuggageManifestCalculationsStrategy implements CalculationStrategy{
+public class LuggageManifestCalculationStrategy implements CalculationStrategy{
     @Override
     public int calculate(String filePath){
         String javaCode = readJavaCodeFromFile(filePath);
@@ -68,7 +68,7 @@ public class LuggageManifestCalculationsStrategy implements CalculationStrategy{
         return constructorScore;
     }
 
-    private int checkAddLuggageMethod(String javaCode) {
+    public int checkAddLuggageMethod(String javaCode) {
         int methodScore = 0;
 
         Pattern addLuggagePattern = Pattern.compile("public\\s+String\\s+addLuggage\\(Passenger\\s+p,\\s+Flight\\s+f\\)\\s*\\{([^}]*)\\}");
@@ -83,7 +83,7 @@ public class LuggageManifestCalculationsStrategy implements CalculationStrategy{
         return methodScore;
     }
 
-    private int checkGetExcessLuggageCost(String javaCode) {
+    public int checkGetExcessLuggageCost(String javaCode) {
         int methodScore = 0;
 
         Pattern getExcessLuggageCostPattern = Pattern.compile("public\\s+double\\s+getExcessLuggageCost\\(int\\s+numPieces,\\s+int\\s+numAllowedPieces\\)\\s*\\{([^}]*)\\}");

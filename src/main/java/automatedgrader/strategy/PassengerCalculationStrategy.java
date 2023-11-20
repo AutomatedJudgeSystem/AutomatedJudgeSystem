@@ -1,4 +1,4 @@
-package automatedgrader.strategy;
+package project.strategy;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -87,7 +87,7 @@ public class PassengerCalculationStrategy implements CalculationStrategy {
     }
     
 
-    private int checkMethods(String javaCode) {
+    public int checkMethods(String javaCode) {
         int methodScore = 0;
 
         Pattern assignRandomCabinClassPattern = Pattern.compile("public\\s+void\\s+assignRandomCabinClass\\(\\)\\s*\\{");
