@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class FlightCalculationStrategy implements CalculationStrategy {
 
     @Override
-    public EvaluationResult calculate(String filePath) {
+    public int calculate(String filePath) {
 
         String javaCode = readJavaCodeFromFile(filePath);
         int score = 0;
@@ -31,10 +31,18 @@ public class FlightCalculationStrategy implements CalculationStrategy {
 
         // Check toString method
         score += checkToStringMethod(javaCode);
-        
+
+        return score;
+    }
+
+    public EvaluationResult createResult (String filePath) {
+        String javaCode = readJavaCodeFromFile(filePath);
+
         String testname= "FlightCalculation";
-        String total = "Total marks earned out of 16: "+ score;
-        String feedback ="Total score possible: 16 /n" + "Attribute marks: " +checkAttributes(javaCode) +"\n Constructor marks: "+ checkConstructor(javaCode) +"/n Other Method marks: "+ (checkCheckInLuggageMethod(javaCode)+ checkPrintLuggageManifestMethod(javaCode)+ checkGetAllowedLuggageMethod(javaCode)+checkToStringMethod(javaCode));
+        String total = "Total marks earned out of 16: "+ calculate(filePath);
+        String feedback ="Total score possible: 16 /n" + "Attribute marks: " +checkAttributes(javaCode) +"\n Constructor marks: "+ 
+                          checkConstructor(javaCode) +"/n Other Method marks: "+ (checkCheckInLuggageMethod(javaCode)+ checkPrintLuggageManifestMethod(javaCode)+ 
+                          checkGetAllowedLuggageMethod(javaCode)+checkToStringMethod(javaCode));
 
         return new EvaluationResult(testname, total, feedback);
     }
