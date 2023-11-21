@@ -1,8 +1,11 @@
 package automatedgrader;
 
+import java.io.File;
 import java.io.IOException;
-
+import java.util.ArrayList;
+import java.util.Arrays;
 import automatedgrader.template.NestedZipFileHandler;
+import automatedgrader.strategy.*;
 
 public class App {
     public static void main(String[] args) {
@@ -16,7 +19,26 @@ public class App {
             System.err.println("Unexpected IOException: " + e.getMessage());
             e.printStackTrace();
         }
-        
+
+        AssignmentEvaluator e1 = new AssignmentEvaluator(new LuaggageSlipCalculationStrategy());
+
+        File submissions = new File("files/submissions");
+        File[] submissionFolders = submissions.listFiles();
+        ArrayList <File> submissionFiles = new ArrayList<>();
+
+        for(File submissionFile: submissionFolders){
+            submissionFiles.addAll(Arrays.asList(submissionFile.listFiles()));
+        }
+
+        for(File submissionFile: submissionFiles){
+
+            if(submissionFile.getName().endsWith(".java")){
+                System.out.println(submissionFile.getName());
+                e1.evaluateAssignment(submissionFile.getName());
+                System.out.println("");
+            }
+        }
+       
     }
         
         /*
