@@ -1,7 +1,15 @@
 package automatedgrader;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
+import automatedgrader.observer.PDFGenerator;
+import automatedgrader.observer.PDFObserver;
+import automatedgrader.observer.Submission;
 import automatedgrader.template.NestedZipFileHandler;
 
 public class App {
@@ -17,6 +25,23 @@ public class App {
             e.printStackTrace();
         }
         
+        //create submissions with submission files and save to a collection
+        ArrayList<Submission> submissions = new ArrayList<Submission>();
+        File submissionsFolder = new File("files/submissions");
+        File[] submissionFolders = submissionsFolder.listFiles();
+        for(File f : submissionFolders){
+            String[] splitFileName = f.getName().split("_");
+            int assignmentNumber = Integer.parseInt(splitFileName[3].substring(1));
+            Submission s = new Submission(splitFileName[2], f.getName(), assignmentNumber);
+            PDFObserver pdfObserver = new PDFGenerator();
+            s.attachObserver(pdfObserver);
+            submissions.add(s);
+        }
+
+        // } catch (IOException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
     }
         
         /*
