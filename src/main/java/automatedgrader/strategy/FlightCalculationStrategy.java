@@ -18,7 +18,7 @@ public class FlightCalculationStrategy implements CalculationStrategy {
         score += checkAttributes(javaCode, filePath);
 
         // Check constructor
-        score += checkConstructor(javaCode);
+        score += checkConstructor(javaCode, filePath);
 
         // Check checkInLuggage method
         score += checkCheckInLuggageMethod(javaCode);
@@ -41,7 +41,7 @@ public class FlightCalculationStrategy implements CalculationStrategy {
         String testname= "FlightCalculation";
         String total = "Total marks earned out of 16: "+ calculate(filePath);
         String feedback ="Total score possible: 16 /n" + "Attribute marks: " + checkAttributes(javaCode, filePath) +"\n Constructor marks: "+ 
-                          checkConstructor(javaCode) +"/n Other Method marks: "+ (checkCheckInLuggageMethod(javaCode)+ checkPrintLuggageManifestMethod(javaCode)+ 
+                          checkConstructor(javaCode, filePath) +"/n Other Method marks: "+ (checkCheckInLuggageMethod(javaCode)+ checkPrintLuggageManifestMethod(javaCode)+ 
                           checkGetAllowedLuggageMethod(javaCode)+checkToStringMethod(javaCode));
         boolean status = false;
 
