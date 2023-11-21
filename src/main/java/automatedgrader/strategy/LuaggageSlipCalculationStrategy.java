@@ -9,18 +9,27 @@ import java.nio.file.Paths;
 
 public class LuaggageSlipCalculationStrategy implements CalculationStrategy{
 
-    public int calculate(String filePath) {
-
+    public EvaluationResult calculate(String filePath) {
         String javaCode = readJavaCodeFromFile(filePath);
         int score = 0;
 
+        // Check attribute types
         score += checkAttributeTypes(javaCode);
+
+        // Check constructors
         score += checkConstructors(javaCode);
+
+        // Check methods
         score += checkMethods(javaCode);
 
-        return score;
-    }
+        // Create an EvaluationResult
+        String feedback ="Total score possible: 14 /n" + "Attribute marks: " +checkAttributeTypes(javaCode) +"\n Constructor marks: "+ checkConstructors(javaCode) +"/n Other Method marks: "+ checkMethods(javaCode);
 
+        String testName = "LuaggageSlipCalculation"; // Customize as needed
+        String total = "Total marks earned out of 14: "+ score;
+
+        return new EvaluationResult(testName, total, feedback);
+    }
     public String readJavaCodeFromFile(String filePath) {
         try {
             return Files.readString(Paths.get(filePath));
