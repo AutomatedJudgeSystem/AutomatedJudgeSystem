@@ -1,0 +1,23 @@
+#BlueJ class context
+comment0.target=Flight
+comment1.params=flightNo\ destination\ origin\ flightDate
+comment1.target=Flight(java.lang.String,\ java.lang.String,\ java.lang.String,\ java.time.LocalDateTime)
+comment10.params=
+comment10.target=java.lang.String\ toString()
+comment2.params=
+comment2.target=java.lang.String\ getFlightNo()
+comment3.params=
+comment3.target=java.lang.String\ getDestination()
+comment4.params=
+comment4.target=java.lang.String\ getOrigin()
+comment5.params=
+comment5.target=java.time.LocalDateTime\ getFlightDate()
+comment6.params=
+comment6.target=LuggageManifest\ getManifest()
+comment7.params=p
+comment7.target=java.lang.String\ checkInLuggage(Passenger)
+comment8.params=
+comment8.target=java.lang.String\ printLuggageManifest()
+comment9.params=cabinClass
+comment9.target=int\ getAllowedLuggage(char)
+numComments=11

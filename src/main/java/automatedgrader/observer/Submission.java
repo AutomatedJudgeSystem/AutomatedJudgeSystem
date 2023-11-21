@@ -1,5 +1,6 @@
 package automatedgrader.observer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import automatedgrader.strategy.EvaluationResult;
@@ -11,11 +12,13 @@ public class Submission implements SubmissionSubject {
     private int assignmentNumber;
     private double overallScore;
     private List<PDFObserver> observers;
+    private String filePath;
 
     public Submission(String studentId, String fileName, int assignmentNumber) {
         this.studentId = studentId;
         this.fileName = fileName;
         this.assignmentNumber = assignmentNumber;
+        this.observers = new ArrayList<>();
         // You can initialize other properties as needed
     }
     
@@ -63,5 +66,9 @@ public class Submission implements SubmissionSubject {
 
     public void setOverallScore(double overallScore) {
         this.overallScore = overallScore;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }

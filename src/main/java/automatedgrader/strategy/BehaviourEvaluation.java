@@ -13,7 +13,6 @@ public class BehaviourEvaluation implements EvaluationStrategy {
         String javaCode = readJavaCodeFromFile(filePath);
 
         checkMethodBehavior(javaCode);
-        // Add more behavior checks
     }
 
     private void checkMethodBehavior(String javaCode) {

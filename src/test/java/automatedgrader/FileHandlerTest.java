@@ -2,16 +2,35 @@ package automatedgrader;
 
 import junit.framework.TestCase;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
+
+
 
 import automatedgrader.template.FileHandler;
 import automatedgrader.template.NestedZipFileHandler;
 
-public class FileHandlerTest extends TestCase{
+
+/**
+ * Test class for FileHandler and its concrete implementation NestedZipFileHandler.
+ */
+public class FileHandlerTest{
     final static String path = "files/test/";
 
     /**
@@ -101,5 +120,23 @@ public class FileHandlerTest extends TestCase{
             assertTrue(Files.exists(Paths.get((path + "valid.zip").substring(0, (path + "valid.zip").length()-4))));
             assertEquals("The folder '" + path + "valid' exists already. It's contents may be altered but not deleted.", e.getMessage());
         }
+    }
+
+    /**
+     * Test case to ensure that multiple valid zip files are handled correctly.
+     * Responsible for checking if the files are extracted and the directory structure is preserved.
+     */
+    @Test
+    public void testMultipleValidZipFilesHandling() {
+        // Add test logic for multiple submissions...
+    }
+
+    /**
+     * Test case to verify correct handling of multi-file submissions.
+     * Responsible for checking if the files within the submission are processed correctly.
+     */
+    @Test
+    public void testMultiFileSubmissionHandling() {
+        // Add test logic for multi-file submissions...
     }
 }

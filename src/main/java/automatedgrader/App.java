@@ -1,16 +1,15 @@
 package automatedgrader;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import automatedgrader.observer.PDFGenerator;
 import automatedgrader.observer.PDFObserver;
 import automatedgrader.observer.Submission;
 import automatedgrader.template.NestedZipFileHandler;
+import automatedgrader.strategy.*;
 
 public class App {
     public static void main(String[] args) {
@@ -26,7 +25,7 @@ public class App {
         }
         
         //create submissions with submission files and save to a collection
-        ArrayList<Submission> submissions = new ArrayList<Submission>();
+        ArrayList<Submission> submissionsList = new ArrayList<Submission>();
         File submissionsFolder = new File("files/submissions");
         File[] submissionFolders = submissionsFolder.listFiles();
         for(File f : submissionFolders){
@@ -35,13 +34,33 @@ public class App {
             Submission s = new Submission(splitFileName[2], f.getName(), assignmentNumber);
             PDFObserver pdfObserver = new PDFGenerator();
             s.attachObserver(pdfObserver);
-            submissions.add(s);
+            submissionsList.add(s);
         }
 
         // } catch (IOException e) {
         //     // TODO Auto-generated catch block
         //     e.printStackTrace();
         // }
+
+        AssignmentEvaluator e1 = new AssignmentEvaluator(new LuaggageSlipCalculationStrategy());
+
+        File submissions = new File("files/submissions");
+        submissionFolders = submissions.listFiles();
+        ArrayList <File> submissionFiles = new ArrayList<>();
+
+        for(File submissionFile: submissionFolders){
+            submissionFiles.addAll(Arrays.asList(submissionFile.listFiles()));
+        }
+
+        for(File submissionFile: submissionFiles){
+
+            if(submissionFile.getName().endsWith(".java")){
+                System.out.println(submissionFile.getName());
+                e1.evaluateAssignment(submissionFile.getName());
+                System.out.println("");
+            }
+        }
+       
     }
         
         /*
