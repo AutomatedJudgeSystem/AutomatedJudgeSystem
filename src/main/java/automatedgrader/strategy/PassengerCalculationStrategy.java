@@ -12,7 +12,8 @@ public class PassengerCalculationStrategy implements CalculationStrategy {
    // private static final Random random = new Random();
 
     @Override
-    public EvaluationResult calculate(String filePath) {
+    public int calculate(String filePath) {
+
             String javaCode = readJavaCodeFromFile(filePath);
             int score = 0;
     
@@ -30,7 +31,21 @@ public class PassengerCalculationStrategy implements CalculationStrategy {
             String testName = "PassengerCalculation";
 
         return new EvaluationResult(testName, total, feedback);
-        }
+    }
+
+    public EvaluationResult createResult (String filePath) {
+        String javaCode = readJavaCodeFromFile(filePath);
+
+        String testname= "FlightCalculation";
+        String total = "Total marks earned out of 16: "+ calculate(filePath);
+        String feedback ="Total score possible: 16 /n" + "Attribute marks: " + checkAttributes(javaCode, filePath) +"\n Constructor marks: "+ 
+                          checkConstructor(javaCode) +"/n Other Method marks: "+ (checkCheckInLuggageMethod(javaCode)+ checkPrintLuggageManifestMethod(javaCode)+ 
+                          checkGetAllowedLuggageMethod(javaCode)+checkToStringMethod(javaCode));
+        boolean status = false;
+
+        return new EvaluationResult(testname, total, feedback, status);
+    }
+
     public String readJavaCodeFromFile(String filePath) {
         try {
             return Files.readString(Paths.get(filePath));
@@ -40,7 +55,7 @@ public class PassengerCalculationStrategy implements CalculationStrategy {
         }
     }
 
-    public int checkAttributeTypes(String javaCode) {
+    public int checkAttributes(String javaCode) {
         int attributeScore = 0;
 
         String[] attributes = {"passportNumber", "flightNo", "firstName", "lastName", "numLuggage", "cabinClass"};

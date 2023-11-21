@@ -15,7 +15,7 @@ public class FlightCalculationStrategy implements CalculationStrategy {
         int score = 0;
 
         // Check attributes
-        score += checkAttributes(javaCode);
+        score += checkAttributes(javaCode, filePath);
 
         // Check constructor
         score += checkConstructor(javaCode);
@@ -40,7 +40,7 @@ public class FlightCalculationStrategy implements CalculationStrategy {
 
         String testname= "FlightCalculation";
         String total = "Total marks earned out of 16: "+ calculate(filePath);
-        String feedback ="Total score possible: 16 /n" + "Attribute marks: " +checkAttributes(javaCode) +"\n Constructor marks: "+ 
+        String feedback ="Total score possible: 16 /n" + "Attribute marks: " + checkAttributes(javaCode, filePath) +"\n Constructor marks: "+ 
                           checkConstructor(javaCode) +"/n Other Method marks: "+ (checkCheckInLuggageMethod(javaCode)+ checkPrintLuggageManifestMethod(javaCode)+ 
                           checkGetAllowedLuggageMethod(javaCode)+checkToStringMethod(javaCode));
         boolean status = false;
@@ -57,8 +57,9 @@ public class FlightCalculationStrategy implements CalculationStrategy {
         }
     }
 
-    public int checkAttributes(String javaCode) {
+    public int checkAttributes(String javaCode, String filePath) {
         int attributeScore = 0;
+        EvaluationResult testResult = createResult(filePath);
 
         // Define the expected attribute types
         String[] expectedAttributeTypes = {"String", "String", "String", "LocalDateTime", "LuggageManifest"};
@@ -76,16 +77,18 @@ public class FlightCalculationStrategy implements CalculationStrategy {
 
             if (matcher.find()) {
                 attributeScore += 1;
+                testResult.setStatus(true);
+
             } else {
                 System.out.println("Attribute '" + attribute + "' does not meet the criteria.");
-                // Add corrective feedback or take appropriate action
+                testResult.setStatus(false);
             }
         }
 
         return attributeScore;
     }
 
-    public int checkConstructor(String javaCode) {
+    public int checkConstructor(String javaCode, String filePath) {
         int constructorScore = 0;
 
         // Check Flight(String flightNo, String destination, String origin, LocalDateTime flightDate) constructor
