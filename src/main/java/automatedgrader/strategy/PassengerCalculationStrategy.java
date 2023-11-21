@@ -3,44 +3,32 @@ package automatedgrader.strategy;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-//import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PassengerCalculationStrategy implements CalculationStrategy {
 
-   // private static final Random random = new Random();
-
     @Override
     public int calculate(String filePath) {
 
-            String javaCode = readJavaCodeFromFile(filePath);
-            int score = 0;
+        String javaCode = readJavaCodeFromFile(filePath);
+        int score = 0;
     
-            // Check attribute types
-            score += checkAttributeTypes(javaCode);
+        score += checkAttributes(javaCode, filePath);
+        score += checkConstructor(javaCode, filePath);
+        score += checkMethods(javaCode, filePath);
     
-            // Check constructor
-            score += checkConstructor(javaCode);
-    
-            // Check methods
-            score += checkMethods(javaCode);
-    
-            String feedback ="Total score possible: 16 /n" + "Attribute marks: " +checkAttributeTypes(javaCode) +"\n Constructor marks: "+ checkConstructor(javaCode) +"/n Other Method marks: "+ checkMethods(javaCode);
-            String total = "Total marks earned out of 16: "+ score;
-            String testName = "PassengerCalculation";
-
-        return new EvaluationResult(testName, total, feedback);
+        return score;
     }
 
     public EvaluationResult createResult (String filePath) {
         String javaCode = readJavaCodeFromFile(filePath);
 
-        String testname= "FlightCalculation";
+        String testname= "Passenger Calculation";
         String total = "Total marks earned out of 16: "+ calculate(filePath);
-        String feedback ="Total score possible: 16 /n" + "Attribute marks: " + checkAttributes(javaCode, filePath) +"\n Constructor marks: "+ 
-                          checkConstructor(javaCode) +"/n Other Method marks: "+ (checkCheckInLuggageMethod(javaCode)+ checkPrintLuggageManifestMethod(javaCode)+ 
-                          checkGetAllowedLuggageMethod(javaCode)+checkToStringMethod(javaCode));
+        String feedback = "Total score possible: 16 /n" + "Attribute marks: " +checkAttributes(javaCode, filePath) +
+                          "\n Constructor marks: "+ checkConstructor(javaCode, filePath) +"/n Other Method marks: "+ 
+                          checkMethods(javaCode, filePath);
         boolean status = false;
 
         return new EvaluationResult(testname, total, feedback, status);
@@ -55,8 +43,9 @@ public class PassengerCalculationStrategy implements CalculationStrategy {
         }
     }
 
-    public int checkAttributes(String javaCode) {
+    public int checkAttributes(String javaCode, String filePath) {
         int attributeScore = 0;
+        EvaluationResult testResult = createResult(filePath); 
 
         String[] attributes = {"passportNumber", "flightNo", "firstName", "lastName", "numLuggage", "cabinClass"};
 
@@ -66,6 +55,7 @@ public class PassengerCalculationStrategy implements CalculationStrategy {
 
             if (matcher.find()) {
                 attributeScore += 1;
+                testResult.setStatus(true);
             } else {
                 System.out.println("Attribute '" + attribute + "' does not meet the criteria.");
             }
@@ -74,10 +64,11 @@ public class PassengerCalculationStrategy implements CalculationStrategy {
         return attributeScore;
     }
 
-    public int checkConstructor(String javaCode) {
+    public int checkConstructor(String javaCode, String filePath) {
         Pattern constructorPattern = Pattern.compile("public\\s+Passenger\\s*\\(\\s*String\\s+passportNumber,\\s*String\\s+firstName,\\s*String\\s+lastName,\\s*String\\s+flightNo\\s*\\)\\s*\\{([^}]*)\\}");
         Matcher matcher = constructorPattern.matcher(javaCode);
-    
+        EvaluationResult testResult = createResult(filePath); 
+
         if (matcher.find()) {
             String constructorBody = matcher.group(1);
     
@@ -95,25 +86,25 @@ public class PassengerCalculationStrategy implements CalculationStrategy {
                     constructorBody.contains("randomCabinClass()");
     
             if (setsState && randomizesNumLuggage && randomizesCabinClass) {
-                return 4; // Full marks
+                testResult.setStatus(true);
+                return 4; // Full marks 
             } else {
                 System.out.println("Constructor does not meet the criteria.");
-                // Add corrective feedback or take appropriate action
             }
         } else {
             System.out.println("Constructor not found.");
-            // Add corrective feedback or take appropriate action
         }
     
         return 0;
     }
-    
 
-    public int checkMethods(String javaCode) {
+    public int checkMethods(String javaCode, String filePath) {
         int methodScore = 0;
+        EvaluationResult testResult = createResult(filePath); 
 
         Pattern assignRandomCabinClassPattern = Pattern.compile("public\\s+void\\s+assignRandomCabinClass\\(\\)\\s*\\{");
         Matcher assignRandomCabinClassMatcher = assignRandomCabinClassPattern.matcher(javaCode);
+        boolean randomClassPassed = false;
 
         if (assignRandomCabinClassMatcher.find()) {
             String assignRandomCabinClassBody = assignRandomCabinClassMatcher.group(1);
@@ -123,7 +114,8 @@ public class PassengerCalculationStrategy implements CalculationStrategy {
                     && assignRandomCabinClassBody.contains("randomCabinClass()");
     
             if (randomizesCabinClass) {
-                methodScore += 2; // Full marks 
+                methodScore += 2; // Full marks
+                randomClassPassed = true;
             } else {
                 System.out.println("assignRandomCabinClass method does not meet the criteria.");
             }
@@ -134,6 +126,7 @@ public class PassengerCalculationStrategy implements CalculationStrategy {
         // Check toString method
         Pattern toStringPattern = Pattern.compile("public\\s+String\\s+toString\\(\\)\\s*\\{");
         Matcher toStringMatcher = toStringPattern.matcher(javaCode);
+        boolean toStringPassed = false; 
 
         if (toStringMatcher.find()) {
             String toStringBody = toStringMatcher.group(1);
@@ -142,11 +135,16 @@ public class PassengerCalculationStrategy implements CalculationStrategy {
     
             if (correctFormat) {
                 methodScore += 3; // Full marks 
+                toStringPassed = true; 
             } else {
                 System.out.println("toString method does not return the correct format.");
             }
         } else {
             System.out.println("toString method not found.");
+        }
+
+        if(randomClassPassed && toStringPassed){
+            testResult.setStatus(true);
         }
 
         return methodScore;
