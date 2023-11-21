@@ -43,8 +43,9 @@ public class FlightCalculationStrategy implements CalculationStrategy {
         String feedback ="Total score possible: 16 /n" + "Attribute marks: " +checkAttributes(javaCode) +"\n Constructor marks: "+ 
                           checkConstructor(javaCode) +"/n Other Method marks: "+ (checkCheckInLuggageMethod(javaCode)+ checkPrintLuggageManifestMethod(javaCode)+ 
                           checkGetAllowedLuggageMethod(javaCode)+checkToStringMethod(javaCode));
+        boolean status = false;
 
-        return new EvaluationResult(testname, total, feedback);
+        return new EvaluationResult(testname, total, feedback, status);
     }
 
     public String readJavaCodeFromFile(String filePath) {

@@ -7,10 +7,11 @@ public class EvaluationResult {
      private String feedback;
      private boolean status;
 
-     public EvaluationResult( String testname, String total, String feedback ){
+     public EvaluationResult( String testname, String total, String feedback, boolean status){
           this.testname = testname;
           this.total = total;
           this.feedback = feedback;   
+          this.status = status;
     }
     
     public String getTestName() {
@@ -24,5 +25,10 @@ public class EvaluationResult {
     public String getFeedback() {
         return null;
     }
+
+    public void setStatus(boolean status){
+        this.status = status;
+    }
+
 
 }
