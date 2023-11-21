@@ -1,4 +1,4 @@
-package automatedgrader.strategy;
+package project.strategy;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -6,20 +6,35 @@ import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LuggageManifestCalculationsStrategy implements CalculationStrategy{
+public class LuggageManifestCalculationStrategy implements CalculationStrategy{
     @Override
-    public int calculate(String filePath){
+    public EvaluationResult calculate(String filePath) {
         String javaCode = readJavaCodeFromFile(filePath);
         int score = 0;
 
+        // Check attributes
         score += checkAttributes(javaCode);
+
+        // Check constructor
         score += checkConstructor(javaCode);
+
+        // Check addLuggage method
         score += checkAddLuggageMethod(javaCode);
+
+        // Check getExcessLuggageCost method
         score += checkGetExcessLuggageCost(javaCode);
+
+        // Check getExcessLuggageCostByPassenger method
         score += checkGetExcessLuggageCostByPassenger(javaCode);
+
+        // Check toString method
         score += checkToStringMethod(javaCode);
 
-        return score;
+        String feedback ="Total score possible: 20 /n" + "Attribute marks: " +checkAttributes(javaCode) +"\n Constructor marks: "+ checkConstructor(javaCode) +"/n Other Method marks: "+ (checkAddLuggageMethod(javaCode)+checkGetExcessLuggageCost(javaCode)+ checkGetExcessLuggageCostByPassenger(javaCode)+ checkToStringMethod(javaCode) );
+        String total = "Total marks earned out of 20: "+ score;
+        String testName = "LuggageManifestCalculation";
+
+        return new EvaluationResult(testName, total, feedback);
     }
 
     public String readJavaCodeFromFile(String filePath) {
@@ -68,7 +83,7 @@ public class LuggageManifestCalculationsStrategy implements CalculationStrategy{
         return constructorScore;
     }
 
-    private int checkAddLuggageMethod(String javaCode) {
+    public int checkAddLuggageMethod(String javaCode) {
         int methodScore = 0;
 
         Pattern addLuggagePattern = Pattern.compile("public\\s+String\\s+addLuggage\\(Passenger\\s+p,\\s+Flight\\s+f\\)\\s*\\{([^}]*)\\}");
@@ -83,7 +98,7 @@ public class LuggageManifestCalculationsStrategy implements CalculationStrategy{
         return methodScore;
     }
 
-    private int checkGetExcessLuggageCost(String javaCode) {
+    public int checkGetExcessLuggageCost(String javaCode) {
         int methodScore = 0;
 
         Pattern getExcessLuggageCostPattern = Pattern.compile("public\\s+double\\s+getExcessLuggageCost\\(int\\s+numPieces,\\s+int\\s+numAllowedPieces\\)\\s*\\{([^}]*)\\}");

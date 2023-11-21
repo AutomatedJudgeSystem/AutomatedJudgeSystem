@@ -1,4 +1,4 @@
-package automatedgrader.strategy;
+package project.strategy;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,18 +12,25 @@ public class PassengerCalculationStrategy implements CalculationStrategy {
    // private static final Random random = new Random();
 
     @Override
-    public int calculate(String filePath) {
+    public EvaluationResult calculate(String filePath) {
+            String javaCode = readJavaCodeFromFile(filePath);
+            int score = 0;
+    
+            // Check attribute types
+            score += checkAttributeTypes(javaCode);
+    
+            // Check constructor
+            score += checkConstructor(javaCode);
+    
+            // Check methods
+            score += checkMethods(javaCode);
+    
+            String feedback ="Total score possible: 16 /n" + "Attribute marks: " +checkAttributeTypes(javaCode) +"\n Constructor marks: "+ checkConstructor(javaCode) +"/n Other Method marks: "+ checkMethods(javaCode);
+            String total = "Total marks earned out of 16: "+ score;
+            String testName = "PassengerCalculation";
 
-        String javaCode = readJavaCodeFromFile(filePath);
-        int score = 0;
-
-        score += checkAttributeTypes(javaCode);
-        score += checkConstructor(javaCode);
-        score += checkMethods(javaCode);
-
-        return score;
-    }
-
+        return new EvaluationResult(testName, total, feedback);
+        }
     public String readJavaCodeFromFile(String filePath) {
         try {
             return Files.readString(Paths.get(filePath));
@@ -87,7 +94,7 @@ public class PassengerCalculationStrategy implements CalculationStrategy {
     }
     
 
-    private int checkMethods(String javaCode) {
+    public int checkMethods(String javaCode) {
         int methodScore = 0;
 
         Pattern assignRandomCabinClassPattern = Pattern.compile("public\\s+void\\s+assignRandomCabinClass\\(\\)\\s*\\{");

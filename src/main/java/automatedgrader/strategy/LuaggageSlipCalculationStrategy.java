@@ -1,4 +1,4 @@
-package automatedgrader.strategy;
+package project.strategy;
 
 
 import java.util.regex.Matcher;
@@ -9,18 +9,27 @@ import java.nio.file.Paths;
 
 public class LuaggageSlipCalculationStrategy implements CalculationStrategy{
 
-    public int calculate(String filePath) {
-
+    public EvaluationResult calculate(String filePath) {
         String javaCode = readJavaCodeFromFile(filePath);
         int score = 0;
 
+        // Check attribute types
         score += checkAttributeTypes(javaCode);
+
+        // Check constructors
         score += checkConstructors(javaCode);
+
+        // Check methods
         score += checkMethods(javaCode);
 
-        return score;
-    }
+        // Create an EvaluationResult
+        String feedback ="Total score possible: 14 /n" + "Attribute marks: " +checkAttributeTypes(javaCode) +"\n Constructor marks: "+ checkConstructors(javaCode) +"/n Other Method marks: "+ checkMethods(javaCode);
 
+        String testName = "LuaggageSlipCalculation"; // Customize as needed
+        String total = "Total marks earned out of 14: "+ score;
+
+        return new EvaluationResult(testName, total, feedback);
+    }
     public String readJavaCodeFromFile(String filePath) {
         try {
             return Files.readString(Paths.get(filePath));
@@ -48,7 +57,7 @@ public class LuaggageSlipCalculationStrategy implements CalculationStrategy{
                 attributeScore += 1;
             } else {
                 System.out.println("Attribute '" + attribute + "' does not meet the criteria.");
-               
+                // Add corrective feedback or take appropriate action
             }
         }
         return attributeScore;
@@ -62,7 +71,7 @@ public class LuaggageSlipCalculationStrategy implements CalculationStrategy{
         Matcher matcher1 = constructorPattern1.matcher(javaCode);
 
         if (matcher1.find()) {
-            constructorScore += 3; // Full marks 
+            constructorScore += 3; // Full marks for LuggageSlip(Passenger p, Flight f) constructor
         } else {
             System.out.println("LuggageSlip(Passenger p, Flight f) constructor not found.");
         }
@@ -72,16 +81,16 @@ public class LuaggageSlipCalculationStrategy implements CalculationStrategy{
         Matcher matcher2 = constructorPattern2.matcher(javaCode);
 
         if (matcher2.find()) {
-            constructorScore += 3; // Full marks 
+            constructorScore += 3; // Full marks for LuggageSlip(Passenger p, Flight f, String label) constructor
         } else {
             System.out.println("LuggageSlip(Passenger p, Flight f, String label) constructor not found.");
-
+            // Add corrective feedback or take appropriate action
         }
 
         return constructorScore;
     }
 
-    private int checkMethods(String javaCode) {
+    public int checkMethods(String javaCode) {
         int methodScore = 0;
 
         // Check hasOwner(String passportNumber) method
@@ -89,19 +98,20 @@ public class LuaggageSlipCalculationStrategy implements CalculationStrategy{
         Matcher hasOwnerMatcher = hasOwnerPattern.matcher(javaCode);
 
         if (hasOwnerMatcher.find()) {
-            methodScore += 2; // Full marks 
+            methodScore += 2; // Full marks for hasOwner(String passportNumber) method
         } else {
             System.out.println("hasOwner(String passportNumber) method not found.");
-           
+            // Add corrective feedback or take appropriate action
         }
 
         Pattern toStringPattern = Pattern.compile("public\\s+String\\s+toString\\(\\)\\s*\\{([^}]*)\\}");
         Matcher toStringMatcher = toStringPattern.matcher(javaCode);
 
         if (toStringMatcher.find()) {
-            methodScore += 2; // Full marks
+            methodScore += 2; // Full marks for toString() method
         } else {
             System.out.println("toString() method not found.");
+            // Add corrective feedback or take appropriate action
         }
         return methodScore;
     }
