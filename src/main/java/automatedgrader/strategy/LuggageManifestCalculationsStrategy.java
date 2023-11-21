@@ -8,18 +8,33 @@ import java.util.regex.Pattern;
 
 public class LuggageManifestCalculationStrategy implements CalculationStrategy{
     @Override
-    public int calculate(String filePath){
+    public EvaluationResult calculate(String filePath) {
         String javaCode = readJavaCodeFromFile(filePath);
         int score = 0;
 
+        // Check attributes
         score += checkAttributes(javaCode);
+
+        // Check constructor
         score += checkConstructor(javaCode);
+
+        // Check addLuggage method
         score += checkAddLuggageMethod(javaCode);
+
+        // Check getExcessLuggageCost method
         score += checkGetExcessLuggageCost(javaCode);
+
+        // Check getExcessLuggageCostByPassenger method
         score += checkGetExcessLuggageCostByPassenger(javaCode);
+
+        // Check toString method
         score += checkToStringMethod(javaCode);
 
-        return score;
+        String feedback ="Total score possible: 20 /n" + "Attribute marks: " +checkAttributes(javaCode) +"\n Constructor marks: "+ checkConstructor(javaCode) +"/n Other Method marks: "+ (checkAddLuggageMethod(javaCode)+checkGetExcessLuggageCost(javaCode)+ checkGetExcessLuggageCostByPassenger(javaCode)+ checkToStringMethod(javaCode) );
+        String total = "Total marks earned out of 20: "+ score;
+        String testName = "LuggageManifestCalculation";
+
+        return new EvaluationResult(testName, total, feedback);
     }
 
     public String readJavaCodeFromFile(String filePath) {
