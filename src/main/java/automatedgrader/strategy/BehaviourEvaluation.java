@@ -2,7 +2,6 @@ package automatedgrader.strategy;
 
 import java.io.IOException;
 import java.nio.file.Files;
-//import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,10 +22,8 @@ public class BehaviourEvaluation implements EvaluationStrategy {
             String methodName = matcher.group(1);
             String methodBody = matcher.group(2);
 
-            // Implement your behavior checks here
             if (methodBody.contains("FileInputStream") && !methodBody.contains("try (FileInputStream")) {
                 System.out.println("Method '" + methodName + "' does not use try-with-resources for FileInputStream. Consider resource management.");
-                // Add corrective feedback or take appropriate action
             }
         }
     } 

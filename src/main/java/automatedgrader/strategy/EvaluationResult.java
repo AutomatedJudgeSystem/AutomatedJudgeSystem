@@ -5,12 +5,13 @@ public class EvaluationResult {
      private String testname;
      private String total;
      private String feedback;
+     private boolean status;
 
-     public EvaluationResult( String testname, String total, String feedback ){
+     public EvaluationResult( String testname, String total, String feedback, boolean status){
           this.testname = testname;
           this.total = total;
-          this.feedback = feedback;
-          
+          this.feedback = feedback;   
+          this.status = status;
     }
     
     public String getTestName() {
@@ -24,8 +25,10 @@ public class EvaluationResult {
     public String getFeedback() {
         return null;
     }
-    
-    // Class implementation for representing the evaluation outcome
-    // Different tests feedback
-    // Calculating score based of evaluation results
+
+    public void setStatus(boolean status){
+        this.status = status;
+    }
+
+
 }

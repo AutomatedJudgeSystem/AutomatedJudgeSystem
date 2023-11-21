@@ -10,7 +10,7 @@ public class CompositeCalculationStrategy implements CalculationStrategy {
     public CompositeCalculationStrategy(NamingConventionEvaluation namingConventionEvaluation,
             ReturnTypeEvaluation returnTypeEvaluation, BehaviourEvaluation behaviourEvaluation,
             InheritanceEvaluation inheritanceEvaluation,
-            LuggageManifestCalculationsStrategy luggageManifestCalculationStrategy,
+            LuggageManifestCalculationStrategy luggageManifestCalculationStrategy,
             PassengerCalculationStrategy passengerCalculationStrategy) {
     }
 

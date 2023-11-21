@@ -28,15 +28,14 @@ public class EvaluationContext {
             System.err.println("IOException during reading the directory: " + e.getMessage());
         }
     }
-
-    // Additional method to integrate assignment evaluation
+    
     public int evaluateAssignment(String filePath) {
         AssignmentEvaluator assignmentEvaluator = new AssignmentEvaluator(new CompositeCalculationStrategy(
                 new NamingConventionEvaluation(),
                 new ReturnTypeEvaluation(),
                 new BehaviourEvaluation(),
                 new InheritanceEvaluation(),
-                new LuggageManifestCalculationsStrategy(),
+                new LuggageManifestCalculationStrategy(),
                 new PassengerCalculationStrategy()
         ));
         return assignmentEvaluator.evaluateAssignment(filePath);

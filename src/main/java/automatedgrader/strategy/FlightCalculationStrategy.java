@@ -9,16 +9,16 @@ import java.util.regex.Pattern;
 public class FlightCalculationStrategy implements CalculationStrategy {
 
     @Override
-    public EvaluationResult calculate(String filePath) {
+    public int calculate(String filePath) {
 
         String javaCode = readJavaCodeFromFile(filePath);
         int score = 0;
 
         // Check attributes
-        score += checkAttributes(javaCode);
+        score += checkAttributes(javaCode, filePath);
 
         // Check constructor
-        score += checkConstructor(javaCode);
+        score += checkConstructor(javaCode, filePath);
 
         // Check checkInLuggage method
         score += checkCheckInLuggageMethod(javaCode);
@@ -31,12 +31,21 @@ public class FlightCalculationStrategy implements CalculationStrategy {
 
         // Check toString method
         score += checkToStringMethod(javaCode);
-        
-        String testname= "FlightCalculation";
-        String total = "Total marks earned out of 16: "+ score;
-        String feedback ="Total score possible: 16 /n" + "Attribute marks: " +checkAttributes(javaCode) +"\n Constructor marks: "+ checkConstructor(javaCode) +"/n Other Method marks: "+ (checkCheckInLuggageMethod(javaCode)+ checkPrintLuggageManifestMethod(javaCode)+ checkGetAllowedLuggageMethod(javaCode)+checkToStringMethod(javaCode));
 
-        return new EvaluationResult(testname, total, feedback);
+        return score;
+    }
+
+    public EvaluationResult createResult (String filePath) {
+        String javaCode = readJavaCodeFromFile(filePath);
+
+        String testname= "FlightCalculation";
+        String total = "Total marks earned out of 16: "+ calculate(filePath);
+        String feedback ="Total score possible: 16 /n" + "Attribute marks: " + checkAttributes(javaCode, filePath) +"\n Constructor marks: "+ 
+                          checkConstructor(javaCode, filePath) +"/n Other Method marks: "+ (checkCheckInLuggageMethod(javaCode)+ checkPrintLuggageManifestMethod(javaCode)+ 
+                          checkGetAllowedLuggageMethod(javaCode)+checkToStringMethod(javaCode));
+        boolean status = false;
+
+        return new EvaluationResult(testname, total, feedback, status);
     }
 
     public String readJavaCodeFromFile(String filePath) {
@@ -48,8 +57,9 @@ public class FlightCalculationStrategy implements CalculationStrategy {
         }
     }
 
-    public int checkAttributes(String javaCode) {
+    public int checkAttributes(String javaCode, String filePath) {
         int attributeScore = 0;
+        EvaluationResult testResult = createResult(filePath);
 
         // Define the expected attribute types
         String[] expectedAttributeTypes = {"String", "String", "String", "LocalDateTime", "LuggageManifest"};
@@ -67,16 +77,18 @@ public class FlightCalculationStrategy implements CalculationStrategy {
 
             if (matcher.find()) {
                 attributeScore += 1;
+                testResult.setStatus(true);
+
             } else {
                 System.out.println("Attribute '" + attribute + "' does not meet the criteria.");
-                // Add corrective feedback or take appropriate action
+                testResult.setStatus(false);
             }
         }
 
         return attributeScore;
     }
 
-    public int checkConstructor(String javaCode) {
+    public int checkConstructor(String javaCode, String filePath) {
         int constructorScore = 0;
 
         // Check Flight(String flightNo, String destination, String origin, LocalDateTime flightDate) constructor
@@ -121,7 +133,6 @@ public class FlightCalculationStrategy implements CalculationStrategy {
             methodScore += 1; // Full marks for printLuggageManifest() method
         } else {
             System.out.println("printLuggageManifest() method not found.");
-            // Add corrective feedback or take appropriate action
         }
 
         return methodScore;
@@ -155,7 +166,6 @@ public class FlightCalculationStrategy implements CalculationStrategy {
             methodScore += 1; // Full marks for toString() method
         } else {
             System.out.println("toString() method not found.");
-            // Add corrective feedback or take appropriate action
         }
 
         return methodScore;
