@@ -14,23 +14,12 @@ public class FlightCalculationStrategy implements CalculationStrategy {
         String javaCode = readJavaCodeFromFile(filePath);
         int score = 0;
 
-        // Check attributes
         score += checkAttributes(javaCode, filePath);
-
-        // Check constructor
         score += checkConstructor(javaCode, filePath);
-
-        // Check checkInLuggage method
-        score += checkCheckInLuggageMethod(javaCode);
-
-        // Check printLuggageManifest method
-        score += checkPrintLuggageManifestMethod(javaCode);
-
-        // Check getAllowedLuggage method
-        score += checkGetAllowedLuggageMethod(javaCode);
-
-        // Check toString method
-        score += checkToStringMethod(javaCode);
+        score += checkCheckInLuggageMethod(javaCode, filePath);
+        score += checkPrintLuggageManifestMethod(javaCode, filePath);
+        score += checkGetAllowedLuggageMethod(javaCode, filePath);
+        score += checkToStringMethod(javaCode, filePath);
 
         return score;
     }
@@ -41,8 +30,8 @@ public class FlightCalculationStrategy implements CalculationStrategy {
         String testname= "FlightCalculation";
         String total = "Total marks earned out of 16: "+ calculate(filePath);
         String feedback ="Total score possible: 16 /n" + "Attribute marks: " + checkAttributes(javaCode, filePath) +"\n Constructor marks: "+ 
-                          checkConstructor(javaCode, filePath) +"/n Other Method marks: "+ (checkCheckInLuggageMethod(javaCode)+ checkPrintLuggageManifestMethod(javaCode)+ 
-                          checkGetAllowedLuggageMethod(javaCode)+checkToStringMethod(javaCode));
+                          checkConstructor(javaCode, filePath) +"/n Other Method marks: "+ (checkCheckInLuggageMethod(javaCode, filePath)+ checkPrintLuggageManifestMethod(javaCode, filePath)+ 
+                          checkGetAllowedLuggageMethod(javaCode, filePath)+checkToStringMethod(javaCode, filePath));
         boolean status = false;
 
         return new EvaluationResult(testname, total, feedback, status);
@@ -81,7 +70,6 @@ public class FlightCalculationStrategy implements CalculationStrategy {
 
             } else {
                 System.out.println("Attribute '" + attribute + "' does not meet the criteria.");
-                testResult.setStatus(false);
             }
         }
 
@@ -90,6 +78,7 @@ public class FlightCalculationStrategy implements CalculationStrategy {
 
     public int checkConstructor(String javaCode, String filePath) {
         int constructorScore = 0;
+        EvaluationResult testResult = createResult(filePath);
 
         // Check Flight(String flightNo, String destination, String origin, LocalDateTime flightDate) constructor
         Pattern constructorPattern = Pattern.compile("public\\s+Flight\\(String\\s+flightNo,\\s+String\\s+destination,\\s+String\\s+origin,\\s+LocalDateTime\\s+flightDate\\)\\s*\\{([^}]*)\\}");
@@ -97,16 +86,17 @@ public class FlightCalculationStrategy implements CalculationStrategy {
 
         if (matcher.find()) {
             constructorScore += 2; // Full marks for Flight constructor
+            testResult.setStatus(true);
         } else {
             System.out.println("Flight constructor not found.");
-            // Add corrective feedback or take appropriate action
         }
 
         return constructorScore;
     }
 
-    private int checkCheckInLuggageMethod(String javaCode) {
+    private int checkCheckInLuggageMethod(String javaCode, String filePath) {
         int methodScore = 0;
+        EvaluationResult testResult = createResult(filePath);
 
         // Check checkInLuggage(Passenger p) method
         Pattern checkInLuggagePattern = Pattern.compile("public\\s+String\\s+checkInLuggage\\(Passenger\\s+p\\)\\s*\\{([^}]*)\\}");
@@ -114,16 +104,17 @@ public class FlightCalculationStrategy implements CalculationStrategy {
 
         if (checkInLuggageMatcher.find()) {
             methodScore += 5; // Full marks for checkInLuggage(Passenger p) method
+            testResult.setStatus(true);
         } else {
             System.out.println("checkInLuggage(Passenger p) method not found.");
-            // Add corrective feedback or take appropriate action
         }
 
         return methodScore;
     }
 
-    private int checkPrintLuggageManifestMethod(String javaCode) {
+    private int checkPrintLuggageManifestMethod(String javaCode, String filePath) {
         int methodScore = 0;
+        EvaluationResult testResult = createResult(filePath);
 
         // Check printLuggageManifest() method
         Pattern printLuggageManifestPattern = Pattern.compile("public\\s+String\\s+printLuggageManifest\\(\\)\\s*\\{([^}]*)\\}");
@@ -131,6 +122,7 @@ public class FlightCalculationStrategy implements CalculationStrategy {
 
         if (printLuggageManifestMatcher.find()) {
             methodScore += 1; // Full marks for printLuggageManifest() method
+            testResult.setStatus(true);
         } else {
             System.out.println("printLuggageManifest() method not found.");
         }
@@ -138,8 +130,9 @@ public class FlightCalculationStrategy implements CalculationStrategy {
         return methodScore;
     }
 
-    private int checkGetAllowedLuggageMethod(String javaCode) {
+    private int checkGetAllowedLuggageMethod(String javaCode, String filePath) {
         int methodScore = 0;
+        EvaluationResult testResult = createResult(filePath);
 
         // Check getAllowedLuggage(char cabinClass) method
         Pattern getAllowedLuggagePattern = Pattern.compile("public\\s+int\\s+getAllowedLuggage\\(char\\s+cabinClass\\)\\s*\\{([^}]*)\\}");
@@ -147,6 +140,7 @@ public class FlightCalculationStrategy implements CalculationStrategy {
 
         if (getAllowedLuggageMatcher.find()) {
             methodScore += 2; // Full marks for getAllowedLuggage(char cabinClass) method
+            testResult.setStatus(true);
         } else {
             System.out.println("getAllowedLuggage(char cabinClass) method not found.");
             // Add corrective feedback or take appropriate action
@@ -155,8 +149,9 @@ public class FlightCalculationStrategy implements CalculationStrategy {
         return methodScore;
     }
 
-    private int checkToStringMethod(String javaCode) {
+    private int checkToStringMethod(String javaCode, String filePath) {
         int methodScore = 0;
+        EvaluationResult testResult = createResult(filePath);
 
         // Check toString() method
         Pattern toStringPattern = Pattern.compile("public\\s+String\\s+toString\\(\\)\\s*\\{([^}]*)\\}");
@@ -164,6 +159,7 @@ public class FlightCalculationStrategy implements CalculationStrategy {
 
         if (toStringMatcher.find()) {
             methodScore += 1; // Full marks for toString() method
+            testResult.setStatus(true);
         } else {
             System.out.println("toString() method not found.");
         }
