@@ -133,7 +133,6 @@ public class FlightCalculationStrategy implements CalculationStrategy {
             methodScore += 1; // Full marks for printLuggageManifest() method
         } else {
             System.out.println("printLuggageManifest() method not found.");
-            // Add corrective feedback or take appropriate action
         }
 
         return methodScore;
@@ -167,7 +166,6 @@ public class FlightCalculationStrategy implements CalculationStrategy {
             methodScore += 1; // Full marks for toString() method
         } else {
             System.out.println("toString() method not found.");
-            // Add corrective feedback or take appropriate action
         }
 
         return methodScore;
