@@ -30,7 +30,7 @@ public class Submission implements SubmissionSubject {
         observers.remove(observer);
     }
 
-    public void notifyObserver(List<EvaluationResult> testResults) {
+    public void notifyObservers(List<EvaluationResult> testResults) {
         for (PDFObserver observer : observers) {
             observer.updatePDF(this, testResults);
         }
