@@ -34,11 +34,13 @@ public class EvaluationResult {
         this.status = status;
     }
 
-    public String isPassed(EvaluationResult result) {
-        if(result.getStatus()){
-            return "Test passed!";
-        }
-        return "Test failed!";
+    public boolean isPassed(EvaluationResult result) {
+       return getStatus();
+
+    }
+    
+    public String getPassStatusMessage() {
+        return status ? "Test passed!" : "Test failed!";
     }
 
     

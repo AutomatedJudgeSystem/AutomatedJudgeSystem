@@ -6,31 +6,55 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class LuaggageSlipCalculationStrategy implements CalculationStrategy{
+public class LuaggageSlipCalculationStrategy implements CalculationStrategy, FeedbackGenerator{
+    private boolean attributesPassed = false;
+    private boolean constructorPassed = false;
+    private boolean methodsPassed = false;
 
     public int calculate(String filePath) {
         String javaCode = readJavaCodeFromFile(filePath);
         int score = 0;
     
-        score += checkAttributeTypes(javaCode, filePath);
-        score += checkConstructors(javaCode, filePath);
-        score += checkMethods(javaCode, filePath);
+        score += checkAttributes(javaCode);
+        score += checkConstructors(javaCode);
+        score += checkMethods(javaCode);
 
         return score;
     }
 
+    @Override
     public EvaluationResult createResult (String filePath) {
         String javaCode = readJavaCodeFromFile(filePath);
 
-        String testname= "Luggage Slip Calculation";
-        String total = "Total marks earned out of 14: "+ calculate(filePath);
-        String feedback = "Total score possible: 14 /n" + "Attribute marks: " +checkAttributeTypes(javaCode, filePath) +"\n Constructor marks: "+
-                          checkConstructors(javaCode, filePath) +"/n Other Method marks: "+ checkMethods(javaCode, filePath);
+        String testname= "Luggage Slip Test";
+        int total = calculate(filePath);
+        String feedback = "Attribute marks: " +checkAttributes(javaCode) +"\n Constructor marks: "+
+                          checkConstructors(javaCode) +"/n Other Method marks: "+ checkMethods(javaCode);
         boolean status = false;
 
         return new EvaluationResult(testname, total, feedback, status);
     }
 
+    @Override
+    public void TestPassed(EvaluationResult evaluationResult){
+        if (attributesPassed && constructorPassed && methodsPassed){
+            evaluationResult.setStatus(true);  
+        }
+
+    }
+
+    @Override
+    public void generateFeedback(String filePath){
+        EvaluationResult evaluationResult = createResult(filePath);
+        
+        System.out.println("TEST NAME: " + evaluationResult.getTestName());
+        TestPassed(evaluationResult);
+        System.out.println("TEST STATUS: " + evaluationResult.isPassed(evaluationResult));
+        System.out.println("FEEDBACK ______________________________________________________/n" 
+                           + evaluationResult.getFeedback());
+        System.out.println("SCORE OUT OF 14: "+ evaluationResult.getTotal() + "/n/n");
+    }
+    
     public String readJavaCodeFromFile(String filePath) {
         try {
             return Files.readString(Paths.get(filePath));
@@ -40,9 +64,8 @@ public class LuaggageSlipCalculationStrategy implements CalculationStrategy{
         }
     }
 
-    public int checkAttributeTypes(String javaCode, String filePath){
+    public int checkAttributes(String javaCode){
         int attributeScore = 0;
-        EvaluationResult testResult = createResult(filePath);
 
         String[] expectedAttributeTypes = {"Passenger", "int", "String", "String"};
         String[] attributes = {"owner", "luggageSlipIDCounter", "luggageSlipID", "label"};
@@ -57,7 +80,7 @@ public class LuaggageSlipCalculationStrategy implements CalculationStrategy{
 
             if (matcher.find()) {
                 attributeScore += 1;
-                testResult.setStatus(true);
+                attributesPassed = true;
                 
             } else {
                 System.out.println("Attribute '" + attribute + "' does not meet the criteria.");
@@ -66,9 +89,8 @@ public class LuaggageSlipCalculationStrategy implements CalculationStrategy{
         return attributeScore;
     }
 
-    public int checkConstructors(String javaCode, String filePath){
+    public int checkConstructors(String javaCode){
         int constructorScore = 0;
-        EvaluationResult testResult = createResult(filePath);
         boolean constructorPassed1 = false;
         boolean constructorPassed2 = false;
 
@@ -96,15 +118,14 @@ public class LuaggageSlipCalculationStrategy implements CalculationStrategy{
         }
 
         if (constructorPassed1 && constructorPassed2){
-            testResult.setStatus(true);
+           constructorPassed = true;
         }
 
         return constructorScore;
     }
 
-    public int checkMethods(String javaCode, String filePath){
+    public int checkMethods(String javaCode){
         int methodScore = 0;
-        EvaluationResult testResult = createResult(filePath);
         boolean hasOwnerPassed = false;
         boolean toStringPassed = false;
 
@@ -117,7 +138,7 @@ public class LuaggageSlipCalculationStrategy implements CalculationStrategy{
             hasOwnerPassed = true;
         } else {
             System.out.println("hasOwner(String passportNumber) method not found.");
-            // Add corrective feedback or take appropriate action
+           
         }
 
         Pattern toStringPattern = Pattern.compile("public\\s+String\\s+toString\\(\\)\\s*\\{([^}]*)\\}");
@@ -128,13 +149,12 @@ public class LuaggageSlipCalculationStrategy implements CalculationStrategy{
             toStringPassed = true;
         } else {
             System.out.println("toString() method not found.");
-            // Add corrective feedback or take appropriate action
         }
 
         if(hasOwnerPassed && toStringPassed){
-            testResult.setStatus(true);
+            methodsPassed = true;
         }
-        
         return methodScore;
     }
+
 }

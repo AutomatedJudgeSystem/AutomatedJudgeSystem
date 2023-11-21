@@ -37,7 +37,7 @@ public class FlightCalculationStrategy implements CalculationStrategy, FeedbackG
 
         String testname= "Flight Test";
         int total = calculate(filePath);
-        String feedback ="Total score possible: 16 /n" + "Attribute marks: " + checkAttributes(javaCode) +" /n Constructor marks: "+ 
+        String feedback = "Attribute marks: " + checkAttributes(javaCode) +" /n Constructor marks: "+ 
                           checkConstructor(javaCode) +"/n Other Method marks: "+ (checkCheckInLuggageMethod(javaCode)+ 
                           checkPrintLuggageManifestMethod(javaCode)+ checkGetAllowedLuggageMethod(javaCode)+
                           checkToStringMethod(javaCode));
@@ -47,13 +47,18 @@ public class FlightCalculationStrategy implements CalculationStrategy, FeedbackG
     }
 
     @Override
-    public void generateFeedback(String filePath){
-        EvaluationResult evaluationResult = createResult(filePath);
-        printResults(evaluationResult);
+    public void TestPassed(EvaluationResult evaluationResult){
+        if (attributesPassed && constructorPassed && checkInLuggagePassed && 
+            printLuggageManifestPassed && allowedLuggagePassed && stringPassed){
+            evaluationResult.setStatus(true);  
+        }
+
     }
 
     @Override
-    public void printResults(EvaluationResult evaluationResult){
+    public void generateFeedback(String filePath){
+        EvaluationResult evaluationResult = createResult(filePath);
+
         System.out.println("TEST NAME: " + evaluationResult.getTestName());
         TestPassed(evaluationResult);
         System.out.println("TEST STATUS: " + evaluationResult.isPassed(evaluationResult));
@@ -61,15 +66,7 @@ public class FlightCalculationStrategy implements CalculationStrategy, FeedbackG
                            + evaluationResult.getFeedback());
         System.out.println("SCORE OUT OF 16: "+ evaluationResult.getTotal() + "/n/n");
 
-    }
-
-    @Override
-    public void TestPassed(EvaluationResult evaluationResult){
-        if (attributesPassed && constructorPassed && checkInLuggagePassed && 
-            printLuggageManifestPassed && allowedLuggagePassed && stringPassed){
-            evaluationResult.setStatus(true);  
-        }
-
+        
     }
 
     public String readJavaCodeFromFile(String filePath) {

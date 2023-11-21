@@ -12,7 +12,6 @@ public class Submission implements SubmissionSubject {
     private int assignmentNumber;
     private double overallScore;
     private List<PDFObserver> observers;
-    private String filePath;
 
     public Submission(String studentId, String fileName, int assignmentNumber) {
         this.studentId = studentId;
@@ -30,9 +29,9 @@ public class Submission implements SubmissionSubject {
         observers.remove(observer);
     }
 
-    public void notifyObservers(List<EvaluationResult> testResults) {
+    public void notifyObservers(EvaluationResult evaluationResult) {
         for (PDFObserver observer : observers) {
-            observer.updatePDF(this, testResults);
+            observer.updatePDF(this, evaluationResult);
         }
     }
 
@@ -66,9 +65,5 @@ public class Submission implements SubmissionSubject {
 
     public void setOverallScore(double overallScore) {
         this.overallScore = overallScore;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
     }
 }

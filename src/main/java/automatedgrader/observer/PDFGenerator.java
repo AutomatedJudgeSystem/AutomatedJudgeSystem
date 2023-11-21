@@ -8,7 +8,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import automatedgrader.strategy.EvaluationResult;
 import automatedgrader.strategy.FlightCalculationStrategy;
 import automatedgrader.strategy.LuaggageSlipCalculationStrategy;
-import automatedgrader.strategy.LuggageManifestCalculationsStrategy;
+import automatedgrader.strategy.LuggageManifestCalculationStrategy;
 import automatedgrader.strategy.PassengerCalculationStrategy;
 
 import java.io.IOException;
@@ -17,10 +17,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+// import java.util.List;
 
 // Concrete Observer Class
-public class PDFGenerator implements PDFObserver {
+public class PDFGenerator extends EvaluationResult implements PDFObserver {
+
+    public PDFGenerator(String testname, int total, String feedback, boolean status) {
+        super(testname, total, feedback, status);
+    }
 
     private static final String OUTPUT_DIRECTORY = "submissions";
 
@@ -29,9 +33,8 @@ public class PDFGenerator implements PDFObserver {
     private int luggageSlipScore;
     private int luggageManifestScore;
     private int flightScore;
-    EvaluationResult result = new EvaluationResult();
 
-    public void updatePDF(Submission submission, List<EvaluationResult> testResults) {
+    public void updatePDF(Submission submission, EvaluationResult evaluationResult) {
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage();
             document.addPage(page);
@@ -44,11 +47,11 @@ public class PDFGenerator implements PDFObserver {
             
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
                 addHeader(contentStream, studentId);
-                addPassengerEvaluation(contentStream, testResults);
-                addLuggageSlipEvaluation(contentStream, testResults);
-                addLuggageManifestEvaluation(contentStream, testResults);
-                addFlightEvaluation(contentStream, testResults);
-                addTestResults(contentStream, testResults);
+                addPassengerEvaluation(contentStream, evaluationResult);
+                addLuggageSlipEvaluation(contentStream, evaluationResult);
+                addLuggageManifestEvaluation(contentStream, evaluationResult);
+                addFlightEvaluation(contentStream, evaluationResult);
+                addTestResults(contentStream, evaluationResult);
                 addOverallScore(contentStream, submission.getOverallScore());
                 addGeneratedDate(contentStream);
         
@@ -69,13 +72,11 @@ public class PDFGenerator implements PDFObserver {
         contentStream.newLineAtOffset(0, -20);
     }
 
-    private void addTestResults(PDPageContentStream contentStream, List<EvaluationResult> testResults) throws IOException {
-        for (EvaluationResult result : testResults) {
-            contentStream.showText(result.getTestName() + ": " + (result.isPassed() ? "Passed" : "Failed"));
+    private void addTestResults(PDPageContentStream contentStream, EvaluationResult result) throws IOException {
+            contentStream.showText(result.getTestName() + ": " + (isPassed(result) ? "Passed" : "Failed"));
             contentStream.newLineAtOffset(0, -15);
             contentStream.showText("Feedback: " + result.getFeedback());
             contentStream.newLineAtOffset(0, -15);
-        }
     }
 
     private void addOverallScore(PDPageContentStream contentStream, double overallScore) throws IOException {
@@ -89,32 +90,32 @@ public class PDFGenerator implements PDFObserver {
         contentStream.close();
     }
 
-    private void addPassengerEvaluation(PDPageContentStream contentStream, List<EvaluationResult> testResults) throws IOException{
+    private void addPassengerEvaluation(PDPageContentStream contentStream, EvaluationResult evaluationResult) throws IOException{
         contentStream.newLineAtOffset(0, -30);
         contentStream.showText("Passsenger Class Evaluation: " + passengerScore);
         contentStream.newLineAtOffset(0, -15);
-        contentStream.showText("Passsenger Class Feedback: " + result.getFeedback());
+        contentStream.showText("Passsenger Class Feedback: " + evaluationResult.getFeedback());
     }
 
-    private void addLuggageSlipEvaluation(PDPageContentStream contentStream, List<EvaluationResult> testResults) throws IOException{
+    private void addLuggageSlipEvaluation(PDPageContentStream contentStream, EvaluationResult evaluationResult) throws IOException{
         contentStream.newLineAtOffset(0, -30);
         contentStream.showText("LuggageSlip Class Evaluation: " + luggageSlipScore);
         contentStream.newLineAtOffset(0, -15);
-        contentStream.showText("LuggageSlip Class Feedback: " + result.getFeedback());
+        contentStream.showText("LuggageSlip Class Feedback: " + evaluationResult.getFeedback());
     }
 
-    private void addLuggageManifestEvaluation(PDPageContentStream contentStream, List<EvaluationResult> testResults) throws IOException{
+    private void addLuggageManifestEvaluation(PDPageContentStream contentStream, EvaluationResult evaluationResult) throws IOException{
         contentStream.newLineAtOffset(0, -30);
         contentStream.showText("LuggageManifest Class Evaluation: " + luggageManifestScore);
         contentStream.newLineAtOffset(0, -15);
-        contentStream.showText("LuggageManifest Class Feedback: " + result.getFeedback());
+        contentStream.showText("LuggageManifest Class Feedback: " + evaluationResult.getFeedback());
     }
 
-    private void addFlightEvaluation(PDPageContentStream contentStream, List<EvaluationResult> testResults) throws IOException{
+    private void addFlightEvaluation(PDPageContentStream contentStream, EvaluationResult evaluationResult) throws IOException{
         contentStream.newLineAtOffset(0, -30);
         contentStream.showText("Flight Class Evaluation: " + flightScore);
         contentStream.newLineAtOffset(0, -15);
-        contentStream.showText("Flight Class Feedback: " + result.getFeedback());
+        contentStream.showText("Flight Class Feedback: " + evaluationResult.getFeedback());
         contentStream.newLineAtOffset(0, -30);
     }
 
@@ -146,7 +147,7 @@ public class PDFGenerator implements PDFObserver {
 
     private int calculateLuggageManifestScore(String filePath) {
         //instance of PassengerCalculationStrategy
-        LuggageManifestCalculationsStrategy luggageManifestStrategy = new LuggageManifestCalculationsStrategy();
+        LuggageManifestCalculationStrategy luggageManifestStrategy = new LuggageManifestCalculationStrategy();
         // Use the calculate method
         luggageManifestScore = luggageManifestStrategy.calculate(filePath);
 

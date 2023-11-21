@@ -1,6 +1,5 @@
 package automatedgrader.observer;
 
-import java.util.List;
 import automatedgrader.strategy.EvaluationResult;
 
 /**
@@ -16,5 +15,5 @@ public interface PDFObserver {
    * @param testResults  List of EvaluationResult objects representing the
    *                     results of the submission evaluation.
    */
-  void updatePDF(Submission submission, List<EvaluationResult> testResults);
+  void updatePDF(Submission submission, EvaluationResult evaluationResult);
 }

@@ -1,6 +1,5 @@
 package automatedgrader.observer;
 
-import java.util.List;
 import automatedgrader.strategy.EvaluationResult;
 
 /**
@@ -26,6 +25,6 @@ public interface SubmissionSubject {
   /**
    * Notifies all attached PDFObservers of a change in the subject.
    */
-  void notifyObservers(List<EvaluationResult> testResults);
+  void notifyObservers(EvaluationResult evaluationResult);
 }
 
