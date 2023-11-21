@@ -33,7 +33,7 @@ public class FlightCalculationStrategy implements CalculationStrategy {
         score += checkToStringMethod(javaCode);
         
         String testname= "FlightCalculation";
-        String total = "Total marks out of 16: "+ score;
+        String total = "Total marks earned out of 16: "+ score;
         String feedback ="Total score possible: 16 /n" + "Attribute marks: " +checkAttributes(javaCode) +"\n Constructor marks: "+ checkConstructor(javaCode) +"/n Other Method marks: "+ (checkCheckInLuggageMethod(javaCode)+ checkPrintLuggageManifestMethod(javaCode)+ checkGetAllowedLuggageMethod(javaCode)+checkToStringMethod(javaCode));
 
         return new EvaluationResult(testname, total, feedback);
