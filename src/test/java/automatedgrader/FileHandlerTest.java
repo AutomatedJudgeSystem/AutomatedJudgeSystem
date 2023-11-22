@@ -110,19 +110,64 @@ public class FileHandlerTest{
 
     /**
      * Test case to ensure that multiple valid zip files are handled correctly.
-     * Responsible for checking if the files are extracted and the directory structure is preserved.
+     * Responsible for checking if each student's submission files are extracted and the directory structure is preserved.
      */
     @Test
     public void testMultipleValidZipFilesHandling() {
-        // Add test logic for multiple submissions...
+        FileHandler fileHandler = new NestedZipFileHandler();
+        try {
+            Path zipPath = Paths.get("files/submissions.zip");
+
+            fileHandler.handleFile(zipPath.toString());
+
+            // check that each student's submission zip exists
+            assertTrue(Files.exists(Paths.get("files/submissions/Nicholas_Pariag_816031948_A1")));
+            assertTrue(Files.exists(Paths.get("files/submissions/Salmah_Hanif_816029006_A1")));
+            assertTrue(Files.exists(Paths.get("files/submissions/Shania_Gajadhar_816030212_A1")));
+
+            Path s1Path = Paths.get("files/submissions/Nicholas_Pariag_816031948_A1");
+            Path s2Path = Paths.get("files/submissions/Salmah_Hanif_816029006_A1");
+            Path s3Path = Paths.get("files/submissions/Shania_Gajadhar_816030212_A1");
+
+            // Use Files.list to efficiently check the existence of files in each submission
+            // count the number of files in each student's submissio folder
+            long count1 = Files.list(s1Path)
+                    .filter(path -> Files.exists(path))
+                    .count();
+
+            long count2 = Files.list(s2Path)
+                    .filter(path -> Files.exists(path))
+                    .count();
+
+            long count3 = Files.list(s3Path)
+                    .filter(path -> Files.exists(path))
+                    .count();
+
+            assertTrue(count1 > 0);
+            assertTrue(count2 > 0);
+            assertTrue(count3 > 0);
+
+        } catch (IOException e) {
+            fail("Unexpected IOException: " + e.getMessage());
+        }
     }
 
     /**
      * Test case to verify correct handling of multi-file submissions.
-     * Responsible for checking if the files within the submission are processed correctly.
+     * Responsible for checking if the files within the student's submission are handled correctly.
      */
     @Test
     public void testMultiFileSubmissionHandling() {
-        // Add test logic for multi-file submissions...
+        FileHandler fileHandler = new NestedZipFileHandler();
+        try {
+            fileHandler.handleFile("files/submissions.zip");
+        } catch (IOException e) {
+            e.getMessage();
+        }
+
+        // check that files from a student's submission have been extracted
+        assertTrue(Files.exists(Paths.get("files/submissions/Nicholas_Pariag_816031948_A1/Flight.java")));
+        assertTrue(Files.exists(Paths.get("files/submissions/Nicholas_Pariag_816031948_A1/LuggageManagementSystem.java")));
+        assertTrue(Files.exists(Paths.get("files/submissions/Nicholas_Pariag_816031948_A1/LuggageManifest.java")));
     }
 }
