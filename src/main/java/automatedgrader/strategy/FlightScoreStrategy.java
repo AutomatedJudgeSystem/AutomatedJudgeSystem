@@ -5,13 +5,34 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.time.LocalDateTime;
 
+/**
+ * FlightScoreStrategy is an implementation of the ScoreCalculationStrategy interface
+ * that dynamically loads a class representing a flight and calculates a score based on
+ * the types of attributes and methods in the loaded class.
+ */
 public class FlightScoreStrategy implements ScoreCalculationStrategy {
-    private Object flightObject; // Object representing the instance of Flight class
 
+    /**
+     * Represents the instance of the Flight class loaded dynamically.
+     * This field holds the object on which attribute type checks and method invocations are performed.
+     */
+    private Object flightObject;
+
+    /**
+     * Constructs a FlightScoreStrategy object by dynamically loading the Flight class
+     * from the specified student folder path and initializing the flightObject field.
+     *
+     * @param studentFolderPath The path to the folder containing the Flight class file.
+     */
     public FlightScoreStrategy(String studentFolderPath) {
         this.flightObject = loadFlightClass(studentFolderPath);
     }
 
+    /**
+     * Calculates a score based on the types of attributes and methods in the loaded Flight class.
+     *
+     * @return The calculated score.
+     */
     @Override
     public double calculateScore() {
         double score = 0.0;
@@ -41,7 +62,12 @@ public class FlightScoreStrategy implements ScoreCalculationStrategy {
         return score;
     }
 
-    // Helper method to load Flight class dynamically
+    /**
+     * Dynamically loads the Flight class from the specified folder path.
+     *
+     * @param studentFolderPath The path to the folder containing the Flight class file.
+     * @return An instance of the loaded Flight class.
+     */
     private Object loadFlightClass(String studentFolderPath) {
         try {
             File file = new File(studentFolderPath);
@@ -54,7 +80,12 @@ public class FlightScoreStrategy implements ScoreCalculationStrategy {
         return null;
     }
 
-    // Helper method to check attribute type
+    /**
+     * Checks the type of the attribute returned by the specified method in the loaded Flight class.
+     *
+     * @param methodName The name of the method representing an attribute.
+     * @return true if the attribute is of type String or LocalDateTime, false otherwise.
+     */
     private boolean checkAttributeType(String methodName) {
         try {
             Object attribute = flightObject.getClass().getMethod(methodName).invoke(flightObject);
@@ -65,7 +96,12 @@ public class FlightScoreStrategy implements ScoreCalculationStrategy {
         return false;
     }
 
-    // Helper method to check getAllowedLuggage method
+    /**
+     * Checks the correctness of the getAllowedLuggage method in the loaded Flight class
+     * by invoking it with different cabin classes and verifying the expected results.
+     *
+     * @return true if the method behaves as expected, false otherwise.
+     */
     private boolean checkGetAllowedLuggageMethod() {
         try {
             char cabinClass = 'F';
