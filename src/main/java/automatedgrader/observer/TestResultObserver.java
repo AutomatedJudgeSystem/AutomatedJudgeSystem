@@ -1,3 +1,5 @@
+package automatedgrader.observer;
+
 /**
  * TestResultObserver Class
  * 
