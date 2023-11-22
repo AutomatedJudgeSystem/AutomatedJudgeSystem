@@ -5,13 +5,34 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Random;
 
+/**
+ * PassengerScoreStrategy is an implementation of the ScoreCalculationStrategy interface
+ * that dynamically loads a class representing a passenger and calculates a score based on
+ * the types of attributes and methods in the loaded class.
+ */
 public class PassengerScoreStrategy implements ScoreCalculationStrategy {
-    private Object passengerObject; // Object representing the instance of Passenger class
 
+    /**
+     * Represents the instance of the Passenger class loaded dynamically.
+     * This field holds the object on which attribute type checks and method invocations are performed.
+     */
+    private Object passengerObject;
+
+    /**
+     * Constructs a PassengerScoreStrategy object by dynamically loading the Passenger class
+     * from the specified student folder path and initializing the passengerObject field.
+     *
+     * @param studentFolderPath The path to the folder containing the Passenger class file.
+     */
     public PassengerScoreStrategy(String studentFolderPath) {
         this.passengerObject = loadPassengerClass(studentFolderPath);
     }
 
+    /**
+     * Calculates a score based on the types of attributes and methods in the loaded Passenger class.
+     *
+     * @return The calculated score.
+     */
     @Override
     public double calculateScore() {
         double score = 0.0;
@@ -48,7 +69,12 @@ public class PassengerScoreStrategy implements ScoreCalculationStrategy {
         return score;
     }
 
-    // Helper method to load Passenger class dynamically
+    /**
+     * Dynamically loads the Passenger class from the specified folder path.
+     *
+     * @param studentFolderPath The path to the folder containing the Passenger class file.
+     * @return An instance of the loaded Passenger class.
+     */
     private Object loadPassengerClass(String studentFolderPath) {
         try {
             File file = new File(studentFolderPath);
@@ -61,7 +87,12 @@ public class PassengerScoreStrategy implements ScoreCalculationStrategy {
         return null;
     }
 
-    // Helper method to check attribute type
+    /**
+     * Checks the type of the attribute returned by the specified method in the loaded Passenger class.
+     *
+     * @param methodName The name of the method representing an attribute.
+     * @return true if the attribute is of type String, Integer, or Character, false otherwise.
+     */
     private boolean checkAttributeType(String methodName) {
         try {
             Object attribute = passengerObject.getClass().getMethod(methodName).invoke(passengerObject);
@@ -72,7 +103,9 @@ public class PassengerScoreStrategy implements ScoreCalculationStrategy {
         return false;
     }
 
-    // Helper method to assign a random cabin class
+    /**
+     * Assigns a random cabin class to the loaded Passenger class using the setCabinClass method.
+     */
     private void assignRandomCabinClass() {
         char[] cabinClasses = {'F', 'B', 'P', 'E'};
         Random random = new Random();
@@ -84,3 +117,4 @@ public class PassengerScoreStrategy implements ScoreCalculationStrategy {
         }
     }
 }
+
