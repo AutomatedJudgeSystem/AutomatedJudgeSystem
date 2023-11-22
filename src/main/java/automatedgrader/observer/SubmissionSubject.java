@@ -1,6 +1,6 @@
 package automatedgrader.observer;
 
-import automatedgrader.strategy.EvaluationResult;
+import java.util.List;
 
 /**
  * The SubmissionSubject interface represents a subject that allows observers
@@ -8,23 +8,26 @@ import automatedgrader.strategy.EvaluationResult;
  */
 public interface SubmissionSubject {
 
-  /**
-   * Attaches a PDFObserver to the subject.
-   *
-   * @param observer The PDFObserver to be attached.
-   */
-  void attachObserver(PDFObserver observer);
+    /**
+     * Attaches a PDFObserver to the subject.
+     *
+     * @param observer The PDFObserver to be attached.
+     */
+    void attachObserver(PDFObserver observer);
 
-  /**
-   * Detaches a PDFObserver from the subject.
-   *
-   * @param observer The PDFObserver to be detached.
-   */
-  void detachObserver(PDFObserver observer);
+    /**
+     * Detaches a PDFObserver from the subject.
+     *
+     * @param observer The PDFObserver to be detached.
+     */
+    void detachObserver(PDFObserver observer);
 
-  /**
-   * Notifies all attached PDFObservers of a change in the subject.
-   */
-  void notifyObservers(EvaluationResult evaluationResult);
+    /**
+     * Notifies all attached PDFObservers of a change in the subject.
+     *
+     * @param Results List of strings representing the details of the change in the subject.
+     */
+    void notifyObservers(List<String> Results);
 }
+
 

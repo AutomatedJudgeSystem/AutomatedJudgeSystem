@@ -6,7 +6,10 @@ import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LuggageManifestCalculationStrategy implements CalculationStrategy, FeedbackGenerator{
+/**
+ * Represents a calculation strategy for evaluating LuggageManifest class implementations.
+ */
+public class LuggageManifestCalculationStrategy implements CalculationStrategy {
     private boolean constructorPassed = false;
     private boolean attributesPassed = false;
     private boolean addLuggagePassed = false;
@@ -14,6 +17,12 @@ public class LuggageManifestCalculationStrategy implements CalculationStrategy, 
     private boolean excessLuggageCostByPassengerPassed = false;
     private boolean stringPassed = false;
 
+    /**
+     * Calculates a score based on the content of a file representing a LuggageManifest class.
+     *
+     * @param filePath The path to the file to be evaluated.
+     * @return The calculated score.
+     */
     @Override
     public int calculate(String filePath) {
         String javaCode = readJavaCodeFromFile(filePath);
@@ -29,43 +38,68 @@ public class LuggageManifestCalculationStrategy implements CalculationStrategy, 
         return score;
     }
 
+    /**
+     * Creates an EvaluationResult for the Luggage Manifest Test based on the content of a file.
+     *
+     * @param filePath The path to the file to be evaluated.
+     * @return The EvaluationResult created.
+     */
     @Override
-    public EvaluationResult createResult (String filePath) {
+    public EvaluationResult createResult(String filePath) {
         String javaCode = readJavaCodeFromFile(filePath);
 
-        String testname= "Luggage Manifest Test";
+        String testname = "Luggage Manifest Test";
         int total = calculate(filePath);
         String feedback = "Attribute marks: " + checkAttributes(javaCode) +
-                         "\n Constructor marks: " + checkConstructor(javaCode) + "/n Other Method marks: " + 
-                         (checkAddLuggageMethod(javaCode) + checkGetExcessLuggageCost(javaCode)+ 
-                         checkGetExcessLuggageCostByPassenger(javaCode) + checkToStringMethod(javaCode) );
+                "\n Constructor marks: " + checkConstructor(javaCode) + "\n Other Method marks: " +
+                (checkAddLuggageMethod(javaCode) + checkGetExcessLuggageCost(javaCode) +
+                        checkGetExcessLuggageCostByPassenger(javaCode) + checkToStringMethod(javaCode));
         boolean status = false;
 
         return new EvaluationResult(testname, total, feedback, status);
     }
 
+    /**
+     * Notifies that the Luggage Manifest Test has passed for the given EvaluationResult.
+     *
+     * @param evaluationResult The EvaluationResult indicating a test pass.
+     */
     @Override
-    public void TestPassed(EvaluationResult evaluationResult){
-        if (attributesPassed && constructorPassed && addLuggagePassed && 
-            excessLuggageCostPassed && excessLuggageCostByPassengerPassed && stringPassed){
-            evaluationResult.setStatus(true);  
+    public void testPassed(EvaluationResult evaluationResult) {
+        if (attributesPassed && constructorPassed && addLuggagePassed &&
+                excessLuggageCostPassed && excessLuggageCostByPassengerPassed && stringPassed) {
+            evaluationResult.setStatus(true);
         }
-
     }
 
+    /**
+     * Generates feedback based on the content of a file representing a LuggageManifest class.
+     *
+     * @param filePath The path to the file to be evaluated.
+     * @return The generated feedback.
+     */
     @Override
-    public void generateFeedback(String filePath){
+    public String generateFeedback(String filePath) {
         EvaluationResult evaluationResult = createResult(filePath);
-        
-        System.out.println("TEST NAME: " + evaluationResult.getTestName());
-        TestPassed(evaluationResult);
-        System.out.println("TEST STATUS: " + evaluationResult.isPassed(evaluationResult));
-        System.out.println("FEEDBACK ______________________________________________________/n" 
-                           + evaluationResult.getFeedback());
-        System.out.println("SCORE OUT OF 20: "+ evaluationResult.getTotal() + "/n/n");
-    
+
+        String result = "TEST NAME: " + evaluationResult.getTestName() + "\n";
+        testPassed(evaluationResult);
+        result += "TEST STATUS: " + evaluationResult.isPassed() + "\n" +
+                "FEEDBACK ______________________________________________________\n"
+                + evaluationResult.getFeedback() + "\n" + "SCORE OUT OF 20: " +
+                evaluationResult.getTotal() + "\n\n";
+
+        evaluationResult.addResult(result);
+        return result;
+
     }
 
+    /**
+     * Reads the content of a Java code file.
+     *
+     * @param filePath The path to the file to be read.
+     * @return The content of the file as a String.
+     */
     public String readJavaCodeFromFile(String filePath) {
         try {
             return Files.readString(Paths.get(filePath));
@@ -75,9 +109,15 @@ public class LuggageManifestCalculationStrategy implements CalculationStrategy, 
         }
     }
 
+    /**
+     * Checks the attributes of the LuggageManifest class in the provided Java code.
+     *
+     * @param javaCode The Java code representing the LuggageManifest class.
+     * @return The score for attributes.
+     */
     public int checkAttributes(String javaCode) {
         int attributeScore = 0;
-        
+
         String[] expectedAttributeTypes = {"ArrayList<LuggageSlip>"};
         String[] attributes = {"slips"};
 
@@ -98,14 +138,20 @@ public class LuggageManifestCalculationStrategy implements CalculationStrategy, 
         return attributeScore;
     }
 
+    /**
+     * Checks the constructor of the LuggageManifest class in the provided Java code.
+     *
+     * @param javaCode The Java code representing the LuggageManifest class.
+     * @return The score for the constructor.
+     */
     public int checkConstructor(String javaCode) {
         int constructorScore = 0;
-       
+
         Pattern constructorPattern = Pattern.compile("public\\s+LuggageManifest\\(\\)\\s*\\{([^}]*)\\}");
         Matcher matcher = constructorPattern.matcher(javaCode);
 
         if (matcher.find()) {
-            constructorScore += 1; // Full marks 
+            constructorScore += 1; // Full marks
             constructorPassed = true;
         } else {
             System.out.println("LuggageManifest() constructor not found.");
@@ -114,9 +160,15 @@ public class LuggageManifestCalculationStrategy implements CalculationStrategy, 
         return constructorScore;
     }
 
+    /**
+     * Checks the addLuggage method in the provided Java code.
+     *
+     * @param javaCode The Java code representing the LuggageManifest class.
+     * @return The score for the addLuggage method.
+     */
     public int checkAddLuggageMethod(String javaCode) {
         int methodScore = 0;
-       
+
         Pattern addLuggagePattern = Pattern.compile("public\\s+String\\s+addLuggage\\(Passenger\\s+p,\\s+Flight\\s+f\\)\\s*\\{([^}]*)\\}");
         Matcher addLuggageMatcher = addLuggagePattern.matcher(javaCode);
 
@@ -130,14 +182,20 @@ public class LuggageManifestCalculationStrategy implements CalculationStrategy, 
         return methodScore;
     }
 
+    /**
+     * Checks the getExcessLuggageCost method in the provided Java code.
+     *
+     * @param javaCode The Java code representing the LuggageManifest class.
+     * @return The score for the getExcessLuggageCost method.
+     */
     public int checkGetExcessLuggageCost(String javaCode) {
         int methodScore = 0;
-    
+
         Pattern getExcessLuggageCostPattern = Pattern.compile("public\\s+double\\s+getExcessLuggageCost\\(int\\s+numPieces,\\s+int\\s+numAllowedPieces\\)\\s*\\{([^}]*)\\}");
         Matcher getExcessLuggageCostMatcher = getExcessLuggageCostPattern.matcher(javaCode);
 
         if (getExcessLuggageCostMatcher.find()) {
-            methodScore += 3; // Full marks 
+            methodScore += 3; // Full marks
             excessLuggageCostPassed = true;
         } else {
             System.out.println("getExcessLuggageCost(int numPieces, int numAllowedPieces) method not found.");
@@ -146,6 +204,12 @@ public class LuggageManifestCalculationStrategy implements CalculationStrategy, 
         return methodScore;
     }
 
+    /**
+     * Checks the getExcessLuggageCostByPassenger method in the provided Java code.
+     *
+     * @param javaCode The Java code representing the LuggageManifest class.
+     * @return The score for the getExcessLuggageCostByPassenger method.
+     */
     private int checkGetExcessLuggageCostByPassenger(String javaCode) {
         int methodScore = 0;
 
@@ -153,7 +217,7 @@ public class LuggageManifestCalculationStrategy implements CalculationStrategy, 
         Matcher getExcessLuggageCostByPassengerMatcher = getExcessLuggageCostByPassengerPattern.matcher(javaCode);
 
         if (getExcessLuggageCostByPassengerMatcher.find()) {
-            methodScore += 5; // Full marks 
+            methodScore += 5; // Full marks
             excessLuggageCostByPassengerPassed = true;
         } else {
             System.out.println("getExcessLuggageCostByPassenger(String passportNumber) method not found.");
@@ -162,14 +226,20 @@ public class LuggageManifestCalculationStrategy implements CalculationStrategy, 
         return methodScore;
     }
 
+    /**
+     * Checks the toString method in the provided Java code.
+     *
+     * @param javaCode The Java code representing the LuggageManifest class.
+     * @return The score for the toString method.
+     */
     private int checkToStringMethod(String javaCode) {
         int methodScore = 0;
-    
+
         Pattern toStringPattern = Pattern.compile("public\\s+String\\s+toString\\(\\)\\s*\\{([^}]*)\\}");
         Matcher toStringMatcher = toStringPattern.matcher(javaCode);
 
         if (toStringMatcher.find()) {
-            methodScore += 3; // Full marks 
+            methodScore += 3; // Full marks
             stringPassed = true;
         } else {
             System.out.println("toString() method not found.");
@@ -177,8 +247,5 @@ public class LuggageManifestCalculationStrategy implements CalculationStrategy, 
 
         return methodScore;
     }
-
-
-
 }
 

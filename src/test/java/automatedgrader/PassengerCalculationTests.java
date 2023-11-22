@@ -48,7 +48,7 @@ public class PassengerCalculationTests {
                 "}";
 
         PassengerCalculationStrategy passengerEvaluation = new PassengerCalculationStrategy();
-        int attributeScore = passengerEvaluation.checkAttributeTypes(javaCode);
+        int attributeScore = passengerEvaluation.checkAttributes(javaCode);
 
         
         int expectedAttributeScore = 6;

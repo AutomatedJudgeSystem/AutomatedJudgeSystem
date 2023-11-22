@@ -1,7 +1,7 @@
 package automatedgrader;
 import org.junit.jupiter.api.Test;
 
-import automatedgrader.strategy.LuggageManifestCalculationsStrategy;
+import automatedgrader.strategy.LuggageManifestCalculationStrategy;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,7 +24,7 @@ public class LuggageManifestCalculationTests {
             Path tempFile = Files.createTempFile(fileName, "");
             Files.writeString(tempFile, expectedJavaCode, StandardOpenOption.WRITE);
 
-            LuggageManifestCalculationsStrategy luggageManifestEvaluation = new LuggageManifestCalculationsStrategy();
+            LuggageManifestCalculationStrategy luggageManifestEvaluation = new LuggageManifestCalculationStrategy();
             String javaCode = luggageManifestEvaluation.readJavaCodeFromFile(tempFile.toString());
 
             assertNotNull(javaCode);
@@ -41,7 +41,7 @@ public class LuggageManifestCalculationTests {
                 "    private ArrayList<LuggageSlip> slips;\n" +
                 "}";
 
-        LuggageManifestCalculationsStrategy luggageManifestEvaluation = new LuggageManifestCalculationsStrategy();
+        LuggageManifestCalculationStrategy luggageManifestEvaluation = new LuggageManifestCalculationStrategy();
         int attributeScore = luggageManifestEvaluation.checkAttributes(javaCode);
 
         int expectedAttributeScore = 2;
@@ -56,7 +56,7 @@ public class LuggageManifestCalculationTests {
                 "    public LuggageManifest() { }\n" +
                 "}";
 
-        LuggageManifestCalculationsStrategy luggageManifestEvaluation = new LuggageManifestCalculationsStrategy();
+        LuggageManifestCalculationStrategy luggageManifestEvaluation = new LuggageManifestCalculationStrategy();
         int constructorScore = luggageManifestEvaluation.checkConstructor(javaCode);
 
         

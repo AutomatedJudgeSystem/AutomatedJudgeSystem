@@ -6,18 +6,26 @@ import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FlightCalculationStrategy implements CalculationStrategy, FeedbackGenerator {
+/**
+ * Represents a calculation strategy for evaluating Flight class implementations.
+ */
+public class FlightCalculationStrategy implements CalculationStrategy {
 
-    private boolean attributesPassed = false;
-    private boolean constructorPassed = false;
-    private boolean checkInLuggagePassed = false;
-    private boolean printLuggageManifestPassed = false;
-    private boolean allowedLuggagePassed = false;
-    private boolean stringPassed = false;
+    public boolean attributesPassed = false;
+    public boolean constructorPassed = false;
+    public boolean checkInLuggagePassed = false;
+    public boolean printLuggageManifestPassed = false;
+    public boolean allowedLuggagePassed = false;
+    public boolean stringPassed = false;
 
+    /**
+     * Calculates a score based on the content of a file representing a Flight class.
+     *
+     * @param filePath The path to the file to be evaluated.
+     * @return The calculated score.
+     */
     @Override
     public int calculate(String filePath) {
-
         String javaCode = readJavaCodeFromFile(filePath);
         int score = 0;
 
@@ -31,44 +39,69 @@ public class FlightCalculationStrategy implements CalculationStrategy, FeedbackG
         return score;
     }
 
+    /**
+     * Creates an EvaluationResult for the Flight Test based on the content of a file.
+     *
+     * @param filePath The path to the file to be evaluated.
+     * @return The EvaluationResult created.
+     */
     @Override
-    public EvaluationResult createResult (String filePath) {
+    public EvaluationResult createResult(String filePath) {
         String javaCode = readJavaCodeFromFile(filePath);
 
-        String testname= "Flight Test";
+        String testname = "Flight Test";
         int total = calculate(filePath);
-        String feedback = "Attribute marks: " + checkAttributes(javaCode) +" /n Constructor marks: "+ 
-                          checkConstructor(javaCode) +"/n Other Method marks: "+ (checkCheckInLuggageMethod(javaCode)+ 
-                          checkPrintLuggageManifestMethod(javaCode)+ checkGetAllowedLuggageMethod(javaCode)+
-                          checkToStringMethod(javaCode));
+        String feedback = "Attribute marks: " + checkAttributes(javaCode) + "\n"  + "Constructor marks: " +
+                checkConstructor(javaCode) + "\n" + "Other Method marks: " + (checkCheckInLuggageMethod(javaCode) +
+                checkPrintLuggageManifestMethod(javaCode) + checkGetAllowedLuggageMethod(javaCode) +
+                checkToStringMethod(javaCode));
+
         boolean status = false;
 
         return new EvaluationResult(testname, total, feedback, status);
     }
 
+    /**
+     * Notifies that the Flight Test has passed for the given EvaluationResult.
+     *
+     * @param evaluationResult The EvaluationResult indicating a test pass.
+     */
     @Override
-    public void TestPassed(EvaluationResult evaluationResult){
-        if (attributesPassed && constructorPassed && checkInLuggagePassed && 
-            printLuggageManifestPassed && allowedLuggagePassed && stringPassed){
-            evaluationResult.setStatus(true);  
+    public void testPassed(EvaluationResult evaluationResult) {
+        if (attributesPassed && constructorPassed && checkInLuggagePassed &&
+                printLuggageManifestPassed && allowedLuggagePassed && stringPassed) {
+            evaluationResult.setStatus(true);
         }
-
     }
 
+    /**
+     * Generates feedback based on the content of a file representing a Flight class.
+     *
+     * @param filePath The path to the file to be evaluated.
+     * @return The generated feedback.
+     */
     @Override
-    public void generateFeedback(String filePath){
+    public String generateFeedback(String filePath) {
         EvaluationResult evaluationResult = createResult(filePath);
 
-        System.out.println("TEST NAME: " + evaluationResult.getTestName());
-        TestPassed(evaluationResult);
-        System.out.println("TEST STATUS: " + evaluationResult.isPassed(evaluationResult));
-        System.out.println("FEEDBACK ______________________________________________________/n" 
-                           + evaluationResult.getFeedback());
-        System.out.println("SCORE OUT OF 16: "+ evaluationResult.getTotal() + "/n/n");
+        String result = "TEST NAME: " + evaluationResult.getTestName() + "\n";
+        testPassed(evaluationResult);
+        result += "TEST STATUS: " + evaluationResult.isPassed() + "\n" +
+                "FEEDBACK ______________________________________________________\n"
+                + evaluationResult.getFeedback() + "\n" + "SCORE OUT OF 16: " +
+                evaluationResult.getTotal() + "\n\n";
 
-        
+        evaluationResult.addResult(result);
+
+        return result;
     }
 
+    /**
+     * Reads the content of a Java code file.
+     *
+     * @param filePath The path to the file to be read.
+     * @return The content of the file as a String.
+     */
     public String readJavaCodeFromFile(String filePath) {
         try {
             return Files.readString(Paths.get(filePath));
@@ -78,9 +111,15 @@ public class FlightCalculationStrategy implements CalculationStrategy, FeedbackG
         }
     }
 
+    /**
+     * Checks the attributes of the Flight class in the provided Java code.
+     *
+     * @param javaCode The Java code representing the Flight class.
+     * @return The score for attributes.
+     */
     public int checkAttributes(String javaCode) {
         int attributeScore = 0;
-       
+
         // Define the expected attribute types
         String[] expectedAttributeTypes = {"String", "String", "String", "LocalDateTime", "LuggageManifest"};
 
@@ -107,6 +146,12 @@ public class FlightCalculationStrategy implements CalculationStrategy, FeedbackG
         return attributeScore;
     }
 
+    /**
+     * Checks the constructor of the Flight class in the provided Java code.
+     *
+     * @param javaCode The Java code representing the Flight class.
+     * @return The score for the constructor.
+     */
     public int checkConstructor(String javaCode) {
         int constructorScore = 0;
 
@@ -123,6 +168,12 @@ public class FlightCalculationStrategy implements CalculationStrategy, FeedbackG
         return constructorScore;
     }
 
+    /**
+     * Checks the checkInLuggage method in the provided Java code.
+     *
+     * @param javaCode The Java code representing the Flight class.
+     * @return The score for the checkInLuggage method.
+     */
     private int checkCheckInLuggageMethod(String javaCode) {
         int methodScore = 0;
 
@@ -140,6 +191,12 @@ public class FlightCalculationStrategy implements CalculationStrategy, FeedbackG
         return methodScore;
     }
 
+    /**
+     * Checks the printLuggageManifest method in the provided Java code.
+     *
+     * @param javaCode The Java code representing the Flight class.
+     * @return The score for the printLuggageManifest method.
+     */
     private int checkPrintLuggageManifestMethod(String javaCode) {
         int methodScore = 0;
 
@@ -157,16 +214,22 @@ public class FlightCalculationStrategy implements CalculationStrategy, FeedbackG
         return methodScore;
     }
 
+    /**
+     * Checks the getAllowedLuggage method in the provided Java code.
+     *
+     * @param javaCode The Java code representing the Flight class.
+     * @return The score for the getAllowedLuggage method.
+     */
     private int checkGetAllowedLuggageMethod(String javaCode) {
         int methodScore = 0;
-    
+
         Pattern getAllowedLuggagePattern = Pattern.compile("public\\s+int\\s+getAllowedLuggage\\(char\\s+cabinClass\\)\\s*\\{([^}]*)\\}");
         Matcher getAllowedLuggageMatcher = getAllowedLuggagePattern.matcher(javaCode);
 
         if (getAllowedLuggageMatcher.find()) {
             methodScore += 2; // Full marks for getAllowedLuggage(char cabinClass) method
             allowedLuggagePassed = true;
-            
+
         } else {
             System.out.println("getAllowedLuggage(char cabinClass) method not found.");
             // Add corrective feedback or take appropriate action
@@ -175,6 +238,12 @@ public class FlightCalculationStrategy implements CalculationStrategy, FeedbackG
         return methodScore;
     }
 
+    /**
+     * Checks the toString method in the provided Java code.
+     *
+     * @param javaCode The Java code representing the Flight class.
+     * @return The score for the toString method.
+     */
     private int checkToStringMethod(String javaCode) {
         int methodScore = 0;
 
@@ -191,5 +260,4 @@ public class FlightCalculationStrategy implements CalculationStrategy, FeedbackG
 
         return methodScore;
     }
-
 }

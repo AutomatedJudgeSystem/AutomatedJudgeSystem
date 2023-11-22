@@ -19,10 +19,10 @@ public class AssignmentEvaluator {
      * Evaluates an assignment based on the provided file path.
      *
      * @param filePath The path to the file to be evaluated.
-     * @return The calculated score.
+     * @return The calculated score or feedback.
      */
-   public int evaluateAssignment(String filepath){
-        return calculationStrategy.calculate(filepath); 
+   public String evaluateAssignment(String filePath){
+        return calculationStrategy.generateFeedback(filePath); 
     }
 }
 

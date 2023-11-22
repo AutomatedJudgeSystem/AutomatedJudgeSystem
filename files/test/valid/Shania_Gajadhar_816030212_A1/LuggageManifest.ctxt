@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=LuggageManifest
+comment1.params=
+comment1.target=LuggageManifest()
+comment2.params=
+comment2.target=java.util.ArrayList\ getSlips()
+comment3.params=p\ f
+comment3.target=java.lang.String\ addLuggage(Passenger,\ Flight)
+comment4.params=numPieces\ numAllowedPieces
+comment4.target=double\ getExcessLuggageCost(int,\ int)
+comment5.params=passportNumber
+comment5.target=java.lang.String\ getExcessLuggageCostByPassenger(java.lang.String)
+comment6.params=
+comment6.target=java.lang.String\ toString()
+numComments=7
