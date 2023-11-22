@@ -6,7 +6,13 @@ import java.util.List;
 
 import automatedgrader.PDFGenerator;
 
-/*
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import automatedgrader.PDFGenerator;
+
+/**
  * TestResultObserver Class
  * 
  * Monitors and stores test results, providing functionality to generate a PDF report.
