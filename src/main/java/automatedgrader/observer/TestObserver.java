@@ -1,30 +1,19 @@
 package automatedgrader.observer;
+
 /**
- * TestObserver Interface
- * 
- * Defines the contract for objects observing and reacting to changes in test results.
- * 
- * How to use:
- * Implementations should override the 'update' method to handle test result updates.
- * Example:
- * ```java
- * public class MyObserver implements TestObserver {
- *    @Override
- *    public void update(String className, boolean passed, double score, String feedback) {
- *        // Custom logic to handle test result updates
- *    }
- * }
- * ```
- * 
- * Method:
- * - `void update(String className, boolean passed, double score, String feedback)`: 
- *   Notifies the observer about a change in test result.
- *   Parameters:
- *   - `className`: Name of the test class.
- *   - `passed`: Indicates whether the test passed.
- *   - `score`: The score achieved by the test.
- *   - `feedback`: Additional feedback or comments about the test.
+ * The `TestObserver` interface represents an observer that receives updates
+ * about the test results, including class name, pass/fail status, score, and feedback.
  */
 public interface TestObserver {
+    
+    /**
+     * This method is called to update the observer with information about a test.
+     *
+     * @param className The name of the class being tested.
+     * @param passed    A boolean indicating whether the test passed or not.
+     * @param score     The score obtained in the test.
+     * @param feedback  Additional feedback or comments about the test.
+     */
     void update(String className, boolean passed, double score, String feedback);
 }
+
