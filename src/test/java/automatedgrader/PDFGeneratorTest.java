@@ -1,56 +1,68 @@
-// package automatedgrader;
+package automatedgrader;
 
-// import automatedgrader.observer.PDFGenerator;
-// import automatedgrader.observer.Submission;
-// import automatedgrader.strategy.EvaluationResult;
-// import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-// import java.nio.file.Files;
-// import java.nio.file.Path;
-// import java.nio.file.Paths;
-// import java.util.ArrayList;
-// import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-// import static org.junit.Assert.assertEquals;
-// import static org.junit.Assert.assertTrue;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
-// public class PDFGeneratorTest {
+class PDFGeneratorTest {
 
-//     @Test
-//     public void testUpdatePDF() {
-//         // Create a PDFGenerator instance
-//         PDFGenerator pdfGenerator = new PDFGenerator(null, 0, null, false);
+    @Test
+    void generateReportTestCorrect() throws IOException {
+        String studentId = "123456";
+        List<String> testResults = Arrays.asList("Test 1: Passed", "Test 2: Failed", "Test 3: Passed");
+        String studentFolderPath = "path/to/student/folder/";
 
-//         // Create a mock Submission
-//         Submission submission = new Submission(null, null, 0, null, null);
-//         submission.setFileName("TestFile");
-//         submission.setStudentId("123456");
-//         submission.setAssignmentNumber(1);
-//         submission.setFileName("/path/to/test/file.java");
+        PDFGenerator.generateReport(studentId, testResults, studentFolderPath);
 
-//         // Create mock EvaluationResults
-//         List<String> testResults = new ArrayList<>();
-//         testResults.add();
-//         testResults.add(new EvaluationResult(null, 0, null, false));
+        Path pdfPath = Path.of(studentFolderPath, studentId + "SubmissionPDFReport.pdf");
+        assertTrue(Files.exists(pdfPath), "PDF file should exist");
+    }
 
-//         // Test the updatePDF method
-//         pdfGenerator.updatePDF(studentId, testResults);
-        
-//         // Assert something based on the expected output
-//         // For example, check if the PDF was created successfully
-//         // You may need to implement additional methods to check the generated PDF
-//         // For simplicity, this example just checks if the calculation strategy is used
-//         // You should adapt these assertions based on your actual implementation and requirements
+    @Test
+    void generateReportTestPartial() throws IOException {
+        String studentId = "987654";
+        String studentFolderPath = "path/to/student/folder/";
 
-//         // For demonstration purposes, we assume the PDFGenerator creates a file with a specific name
-//         String expectedFileName = "123456_TestFile_Assignment1_feedback.pdf";
-//         // Replace this with actual logic to check the generated PDF
+        try {
+            PDFGenerator.generateReport(studentId, Collections.emptyList(), studentFolderPath);
 
-//         // Assert the expected file name
-//         assertEquals(expectedFileName, "123456_TestFile_Assignment1_feedback.pdf");
+            Path pdfPath = Path.of(studentFolderPath, studentId + "SubmissionPDFReport.pdf");
+            assertFilesExist(pdfPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            assert false;
+        }
+    }
 
-//         String outputDirectory = "submissions";
-//         Path outputPath = Paths.get(outputDirectory, expectedFileName);
-//         assertTrue("PDF file should be created in the correct location", Files.exists(outputPath));
-//     }
-// }
+    private void assertFilesExist(Path... paths) {
+        for (Path path : paths) {
+            assertTrue(Files.exists(path), "File should exist: " + path);
+        }
+    }
+
+    @Test
+    void generateTestIncorrect() throws IOException {
+        //Incorrect test data
+        String studentId = "INVALID_ID";
+        String studentFolderPath = "invalid/path/to/student/folder/";
+
+        Files.createDirectories(Path.of(studentFolderPath));
+
+        PDFGenerator.generateReport(studentId, Collections.emptyList(), studentFolderPath);
+
+        Path pdfPath = Path.of(studentFolderPath, studentId + "SubmissionPDFReports.pdf");
+        assertFileDoesNotExist(pdfPath);
+    }
+
+    private void assertFileDoesNotExist(Path path) {
+        assertFalse(Files.exists(path), "File should not exist: " + path);
+    }
+}
