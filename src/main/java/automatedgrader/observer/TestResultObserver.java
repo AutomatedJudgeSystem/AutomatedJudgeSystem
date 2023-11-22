@@ -1,5 +1,11 @@
 package automatedgrader.observer;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import automatedgrader.PDFGenerator;
+
 /**
  * TestResultObserver Class
  * 
