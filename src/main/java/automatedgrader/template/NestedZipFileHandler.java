@@ -10,17 +10,31 @@ import java.util.zip.ZipInputStream;
 import automatedgrader.strategy.EvaluationResult;
 import automatedgrader.strategy.JavaClassEvaluator;
 
+/**
+ * The `NestedZipFileHandler` class extends the `FileHandler` abstract class,
+ * specializing in extracting files from nested zip archives.
+ */
 public class NestedZipFileHandler extends FileHandler {
+
     private List<JavaClassEvaluator> javaClassEvaluators = new ArrayList<>();
     private EvaluationResult evaluationResults;
     private List<String> processedFiles = new ArrayList<>();
     private List<String> studentFolderPaths = new ArrayList<>();
 
+    /**
+     * Constructs a new `NestedZipFileHandler` with the specified evaluation results.
+     *
+     * @param evaluationResults The evaluation results associated with this handler.
+     */
     public NestedZipFileHandler(EvaluationResult evaluationResults) {
         this.evaluationResults = evaluationResults;
     }
 
-    // Method to add JavaClassEvaluator instances
+    /**
+     * Adds a `JavaClassEvaluator` instance to the list of evaluators.
+     *
+     * @param evaluator The `JavaClassEvaluator` to be added.
+     */
     public void addJavaClassEvaluator(JavaClassEvaluator evaluator) {
         javaClassEvaluators.add(evaluator);
     }
@@ -36,6 +50,12 @@ public class NestedZipFileHandler extends FileHandler {
         extractRecursively(zipFilePath);
     }
 
+    /**
+     * Recursively extracts files from a nested zip archive specified by the given path.
+     *
+     * @param zipFilePath The path to the nested zip file to be extracted.
+     * @throws IOException If an I/O error occurs during extraction.
+     */
     private void extractRecursively(String zipFilePath) throws IOException {
         try (ZipInputStream in = new ZipInputStream(new FileInputStream(zipFilePath))) {
             ZipEntry entry = in.getNextEntry();
@@ -86,7 +106,11 @@ public class NestedZipFileHandler extends FileHandler {
         evaluationResults.addResults(getAllEvaluationResults());
     }
 
-    // Helper method to gather all evaluation results from added evaluators
+    /**
+     * Helper method to gather all evaluation results from added evaluators.
+     *
+     * @return The list of all evaluation results.
+     */
     private List<String> getAllEvaluationResults() {
         List<String> allResults = new ArrayList<>();
         for (JavaClassEvaluator evaluator : javaClassEvaluators) {
@@ -95,7 +119,11 @@ public class NestedZipFileHandler extends FileHandler {
         return allResults;
     }
 
-    // Getter for student folder paths
+    /**
+     * Retrieves the list of student folder paths processed during extraction.
+     *
+     * @return The list of student folder paths.
+     */
     public List<String> getStudentFolderPaths() {
         return studentFolderPaths;
     }

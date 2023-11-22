@@ -6,9 +6,9 @@ import java.net.URLClassLoader;
 import java.time.LocalDateTime;
 
 /**
- * FlightScoreStrategy is an implementation of the ScoreCalculationStrategy interface
- * that dynamically loads a class representing a flight and calculates a score based on
- * the types of attributes and methods in the loaded class.
+ * The `FlightScoreStrategy` class is an implementation of the `ScoreCalculationStrategy` interface.
+ * It dynamically loads a class representing a flight and calculates a score based on the types of attributes
+ * and methods in the loaded class.
  */
 public class FlightScoreStrategy implements ScoreCalculationStrategy {
 
@@ -19,8 +19,8 @@ public class FlightScoreStrategy implements ScoreCalculationStrategy {
     private Object flightObject;
 
     /**
-     * Constructs a FlightScoreStrategy object by dynamically loading the Flight class
-     * from the specified student folder path and initializing the flightObject field.
+     * Constructs a `FlightScoreStrategy` object by dynamically loading the Flight class
+     * from the specified student folder path and initializing the `flightObject` field.
      *
      * @param studentFolderPath The path to the folder containing the Flight class file.
      */
@@ -54,7 +54,7 @@ public class FlightScoreStrategy implements ScoreCalculationStrategy {
             score += 1.0;
         }
 
-        // Check the getAllowedLuggage method
+        // Check the `getAllowedLuggage` method
         if (checkGetAllowedLuggageMethod()) {
             score += 2.0;
         }
@@ -84,7 +84,7 @@ public class FlightScoreStrategy implements ScoreCalculationStrategy {
      * Checks the type of the attribute returned by the specified method in the loaded Flight class.
      *
      * @param methodName The name of the method representing an attribute.
-     * @return true if the attribute is of type String or LocalDateTime, false otherwise.
+     * @return `true` if the attribute is of type `String` or `LocalDateTime`, `false` otherwise.
      */
     private boolean checkAttributeType(String methodName) {
         try {
@@ -97,10 +97,10 @@ public class FlightScoreStrategy implements ScoreCalculationStrategy {
     }
 
     /**
-     * Checks the correctness of the getAllowedLuggage method in the loaded Flight class
+     * Checks the correctness of the `getAllowedLuggage` method in the loaded Flight class
      * by invoking it with different cabin classes and verifying the expected results.
      *
-     * @return true if the method behaves as expected, false otherwise.
+     * @return `true` if the method behaves as expected, `false` otherwise.
      */
     private boolean checkGetAllowedLuggageMethod() {
         try {
