@@ -5,13 +5,34 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 
+/**
+ * LuggageManifestScoreStrategy is an implementation of the ScoreCalculationStrategy interface
+ * that dynamically loads a class representing a luggage manifest and calculates a score based on
+ * the types of attributes and methods in the loaded class.
+ */
 public class LuggageManifestScoreStrategy implements ScoreCalculationStrategy {
-    private Object luggageManifestObject; // Object representing the instance of LuggageManifest class
 
+    /**
+     * Represents the instance of the LuggageManifest class loaded dynamically.
+     * This field holds the object on which attribute type checks and method invocations are performed.
+     */
+    private Object luggageManifestObject;
+
+    /**
+     * Constructs a LuggageManifestScoreStrategy object by dynamically loading the LuggageManifest class
+     * from the specified student folder path and initializing the luggageManifestObject field.
+     *
+     * @param studentFolderPath The path to the folder containing the LuggageManifest class file.
+     */
     public LuggageManifestScoreStrategy(String studentFolderPath) {
         this.luggageManifestObject = loadLuggageManifestClass(studentFolderPath);
     }
 
+    /**
+     * Calculates a score based on the types of attributes and methods in the loaded LuggageManifest class.
+     *
+     * @return The calculated score.
+     */
     @Override
     public double calculateScore() {
         double score = 0.0;
@@ -29,7 +50,12 @@ public class LuggageManifestScoreStrategy implements ScoreCalculationStrategy {
         return score;
     }
 
-    // Helper method to load LuggageManifest class dynamically
+    /**
+     * Dynamically loads the LuggageManifest class from the specified folder path.
+     *
+     * @param studentFolderPath The path to the folder containing the LuggageManifest class file.
+     * @return An instance of the loaded LuggageManifest class.
+     */
     private Object loadLuggageManifestClass(String studentFolderPath) {
         try {
             File file = new File(studentFolderPath);
@@ -42,7 +68,12 @@ public class LuggageManifestScoreStrategy implements ScoreCalculationStrategy {
         return null;
     }
 
-    // Helper method to check attribute type
+    /**
+     * Checks the type of the attribute returned by the specified method in the loaded LuggageManifest class.
+     *
+     * @param methodName The name of the method representing an attribute.
+     * @return true if the attribute is of type ArrayList<?>, false otherwise.
+     */
     private boolean checkAttributeType(String methodName) {
         try {
             Object attribute = luggageManifestObject.getClass().getMethod(methodName).invoke(luggageManifestObject);
@@ -53,7 +84,12 @@ public class LuggageManifestScoreStrategy implements ScoreCalculationStrategy {
         return false;
     }
 
-    // Helper method to check getExcessLuggageCost method
+    /**
+     * Checks the correctness of the getExcessLuggageCost method in the loaded LuggageManifest class
+     * by invoking it with example values and verifying the expected result.
+     *
+     * @return true if the method behaves as expected, false otherwise.
+     */
     private boolean checkGetExcessLuggageCostMethod() {
         try {
             Object result = luggageManifestObject.getClass().getMethod("getExcessLuggageCost", int.class, int.class)
@@ -65,3 +101,4 @@ public class LuggageManifestScoreStrategy implements ScoreCalculationStrategy {
         return false;
     }
 }
+
