@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.Assert.assertEquals;
 
+import automatedgrader.strategy.EvaluationResult;
 import automatedgrader.template.FileHandler;
 import automatedgrader.template.NestedZipFileHandler;
 
@@ -24,7 +25,7 @@ public class FileHandlerTest{
      */
     @Test
     public void testValidZipFileHandling() {
-        FileHandler fileHandler = new NestedZipFileHandler();
+        FileHandler fileHandler = new NestedZipFileHandler(new EvaluationResult());
         try {
             fileHandler.handleFile(path + "valid.zip");
             assertTrue(Files.exists(Paths.get(path + "valid")));
@@ -50,7 +51,7 @@ public class FileHandlerTest{
      */
     @Test
     public void testInvalidZipFileExtension() {
-        FileHandler fileHandler = new NestedZipFileHandler();
+        FileHandler fileHandler = new NestedZipFileHandler(new EvaluationResult());
         try {
             fileHandler.handleFile(path + "invalid.txt");
             fail("Expected IOException not thrown");
@@ -65,7 +66,7 @@ public class FileHandlerTest{
      */
     @Test
     public void testEmptyZipFile() {
-        FileHandler fileHandler = new NestedZipFileHandler();
+        FileHandler fileHandler = new NestedZipFileHandler(new EvaluationResult());
         try {
             fileHandler.handleFile(path + "empty.zip");
             fail("Expected IOException not thrown");
@@ -80,7 +81,7 @@ public class FileHandlerTest{
      */
     @Test
     public void testNonExistentZipFile() {
-        FileHandler fileHandler = new NestedZipFileHandler();
+        FileHandler fileHandler = new NestedZipFileHandler(new EvaluationResult());
         try {
             fileHandler.handleFile(path + "nonExistent.zip");
             fail("Expected IOException not thrown");
@@ -95,7 +96,7 @@ public class FileHandlerTest{
      */
     @Test
     public void testDestinationDirectoryReuse() {
-        FileHandler fileHandler = new NestedZipFileHandler();
+        FileHandler fileHandler = new NestedZipFileHandler(new EvaluationResult());
         // String zipFilePath = "path/to/valid/file.zip";
         try {
             fileHandler.handleFile(path + "valid.zip");
