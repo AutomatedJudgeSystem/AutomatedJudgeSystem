@@ -3,7 +3,7 @@ package automatedgrader.strategy;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EvaluationResults {
+public class EvaluationResult {
     private List<String> allResults = new ArrayList<>();
 
     public void addResults(List<String> results) {

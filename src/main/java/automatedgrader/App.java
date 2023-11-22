@@ -8,7 +8,7 @@ import java.util.List;
 
 //import projectv2.observer.TestResultObserver;
 import automatedgrader.strategy.AbstractionEvaluator;
-import automatedgrader.strategy.EvaluationResults;
+import automatedgrader.strategy.EvaluationResult;
 import automatedgrader.strategy.InheritanceEvaluator;
 import automatedgrader.strategy.NamingandTypeEvaluator;
 import automatedgrader.template.NestedZipFileHandler;
@@ -19,7 +19,7 @@ public class App {
         String mainZipFilePath = "files/submissions.zip";
 
         try {
-            EvaluationResults evaluationResults = new EvaluationResults();
+            EvaluationResult evaluationResults = new EvaluationResult();
 
             List<String> namingAndTypeResults = new ArrayList<>();
             NamingandTypeEvaluator namingAndTypeEvaluator = new NamingandTypeEvaluator(namingAndTypeResults);

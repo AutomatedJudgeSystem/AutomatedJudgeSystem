@@ -1,6 +1,12 @@
 package automatedgrader.observer;
 
-/**
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import automatedgrader.PDFGenerator;
+
+/*
  * TestResultObserver Class
  * 
  * Monitors and stores test results, providing functionality to generate a PDF report.
@@ -40,6 +46,7 @@ package automatedgrader.observer;
  * - `private String studentFolderPath`: 
  *   Stores the folder path for the student's test results.
  */
+
 public class TestResultObserver implements TestObserver {
     private List<String> testResults = new ArrayList<>();
     private String studentId;
