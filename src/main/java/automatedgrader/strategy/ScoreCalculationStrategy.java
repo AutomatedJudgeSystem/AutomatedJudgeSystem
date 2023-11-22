@@ -1,4 +1,4 @@
-package projectv2.strategy;
+package automatedgrader.strategy;
 
 public interface ScoreCalculationStrategy {
     double calculateScore();
