@@ -1,3 +1,4 @@
+package automatedgrader.observer;
 /**
  * TestObserver Interface
  * 
