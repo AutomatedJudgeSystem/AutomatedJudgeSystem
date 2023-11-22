@@ -1,4 +1,4 @@
-package projectv2.strategy;
+package automatedgrader.strategy;
 
 import java.util.List;
 import java.util.regex.Matcher;
